@@ -9,7 +9,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Currency
     internal class Goldcs : ICurrency
     {
         public int amount { get; set; }
-        public bool IsUsable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsUsable => false;
         public int X_position { get; set; }
         public int Y_position { get; set; }
     }

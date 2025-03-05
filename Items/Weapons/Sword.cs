@@ -9,9 +9,10 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
     internal class Sword : IWeapon
     {
         public int damage { get ; set; }
-        public bool IsTwoHanded { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        public bool IsUsable { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public bool IsTwoHanded => false;
+        public bool IsUsable => true;
         public int X_position { get; set; }
         public int Y_position { get; set; }
+        public string Name => "Sword";
     }
 }

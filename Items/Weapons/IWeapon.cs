@@ -8,8 +8,9 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {
     internal interface IWeapon : IItem
     {
+        string Name { get; }
 
-        public int damage { get; set; }
-        public bool IsTwoHanded { get; set; }
+        int damage { get;}
+        bool IsTwoHanded { get;}
     }
 }

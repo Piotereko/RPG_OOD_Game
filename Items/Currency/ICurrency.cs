@@ -8,6 +8,6 @@ namespace RPG_wiedzmin_wanna_be.Items.Currency
 {
     internal interface ICurrency:IItem
     {
-        public int amount { get; set; }
+        int amount { get;  }
     }
 }

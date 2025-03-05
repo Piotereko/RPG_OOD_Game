@@ -8,8 +8,8 @@ namespace RPG_wiedzmin_wanna_be.Items
 {
     internal interface IItem
     {
-        public bool IsUsable { get; set; }
-        public int X_position { get; set; }
-        public int Y_position {  get; set; }
+        bool IsUsable { get; }
+        int X_position { get; set; }
+        int Y_position {  get; set; }
     }
 }

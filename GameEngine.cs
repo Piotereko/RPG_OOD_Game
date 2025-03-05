@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be
 {
-    internal class Game
+    internal class GameEngine
     {
+        World world;
+        Player player = new Player();
+        public void Run()
+        { 
+        }
+
     }
+    
 }
