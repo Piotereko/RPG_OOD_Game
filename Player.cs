@@ -8,8 +8,8 @@ namespace RPG_wiedzmin_wanna_be
 {
     internal class Player
     {
-        int pos_x {  get; set; } = 1;
-        int pos_y { get; set; } = 1;
+        int pos_x {  get; set; }
+        int pos_y { get; set; }
 
         public int strength { get; set; }
         public int dexterity {  get; set; }
@@ -18,10 +18,22 @@ namespace RPG_wiedzmin_wanna_be
         public int agression { get; set; }
         public int wisdom {  get; set; }
 
-        void print_player()
+        public Player(int pos_x = 1, int pos_y = 1 , int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
+        {
+            this.pos_x = pos_x;
+            this.pos_y = pos_y;
+            this.strength = strength;
+            this.dexterity = dexterity;
+            this.health = health;
+            this.luck = luck;
+            this.agression = agression;
+            this.wisdom = wisdom;
+        }
+
+        public void print_player()
         {
             Console.SetCursorPosition(pos_x, pos_y);
-            Console.WriteLine("¶");
+            Console.WriteLine("B");
         }
     }
 }
