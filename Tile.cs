@@ -11,7 +11,7 @@ namespace RPG_wiedzmin_wanna_be
     {
         public int pos_x;
         public int pos_y;
-        List<IItem>? items;
+        public List<IItem>? items;
         public bool IsWall { get; set; }
         public Tile() 
         {

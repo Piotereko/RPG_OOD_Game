@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Items;
+using RPG_wiedzmin_wanna_be.Items.Weapons;
 
 namespace RPG_wiedzmin_wanna_be
 {
@@ -21,7 +22,7 @@ namespace RPG_wiedzmin_wanna_be
 
         public World(int _height = 20, int _width = 40) 
         {
-            map = new Tile[_height, _width];
+            map = new Tile[_width, _height];
 
             height = _height;
             width = _width;
@@ -35,42 +36,45 @@ namespace RPG_wiedzmin_wanna_be
                 {
                     Tile tile = new Tile();
                     tile.pos_x = j; tile.pos_y = i;
-                    map[i,j] = tile;
+                    map[j,i] = tile;
                 } 
                 
             }
 
 
             //boundaries walls
-            for(int i = 0; i < height; i++ )
-            {
-                map[i,0].IsWall = true;
-                map[i,width-1].IsWall = true;
-            }
-
             for(int i = 0; i < width; i++ )
             {
-                map[0,i].IsWall = true;
-                map[height -1,i].IsWall = true;
+                map[i,0].IsWall = true;
+                map[i,height-1].IsWall = true;
             }
 
+            for(int i = 0; i < height; i++ )
+            {
+                map[0,i].IsWall = true;
+                map[width -1,i].IsWall = true;
+            }
 
             //obstacles on the map
             for (int i = 4; i < 8; i++)
             {
-                map[i, 10].IsWall = true;
-                map[i, 30].IsWall = true;
+                map[10,i].IsWall = true;
+                map[30,i].IsWall = true;
             }
             for (int i = 12; i < 16; i++)
             {
-                map[i, 10].IsWall = true;
-                map[i, 30].IsWall = true;
+                map[10, i].IsWall = true;
+                map[30, i].IsWall = true;
             }
             for(int i = 10; i < 31; i++)
             {
-                map[3,i].IsWall = true;
-                map[16,i].IsWall = true;
+                map[i,3].IsWall = true;
+                map[i, 16].IsWall = true;
             }
+            Axe axe = new Axe();
+            axe.X_position = 4; axe.Y_position = 4;
+            map[4,4].items = new List<IItem> { axe};
+            items.Add(axe);
         }
         public void printWorld()
         {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RPG_wiedzmin_wanna_be.Items;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,8 @@ namespace RPG_wiedzmin_wanna_be
 {
     internal class Player
     {
-        int pos_x {  get; set; }
-        int pos_y { get; set; }
+        public int pos_x {  get; set; }
+        public int pos_y { get; set; }
 
         public int strength { get; set; }
         public int dexterity {  get; set; }
@@ -17,6 +18,9 @@ namespace RPG_wiedzmin_wanna_be
         public int luck { get; set; }
         public int agression { get; set; }
         public int wisdom {  get; set; }
+
+        public IItem? RightHand;
+        public IItem? LeftHand;
 
         public Player(int pos_x = 1, int pos_y = 1 , int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
         {
