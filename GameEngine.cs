@@ -9,6 +9,9 @@ namespace RPG_wiedzmin_wanna_be
         World world = new World();
         Player player = new Player();
 
+        private Queue<string> logMessages = new Queue<string>(); //stores logs
+        private const int logLimit = 5;
+        private const int logStartY = 24;
 
         public void printTile(int x, int y)
         {
@@ -52,10 +55,26 @@ namespace RPG_wiedzmin_wanna_be
                 Console.Write("I");
             }
         }
+
         public void printLog(string  msg)
         {
-            Console.SetCursorPosition(0, 25);
-            Console.WriteLine(msg);
+            if (logMessages.Count >= logLimit)
+            {
+                logMessages.Dequeue(); 
+            }
+            logMessages.Enqueue(msg); 
+            for (int i = 0; i < logLimit; i++)
+            {
+                Console.SetCursorPosition(0, logStartY + i);
+                Console.Write(new string(' ', Console.WindowWidth));
+            }
+            int index = 0; 
+            foreach (string log in logMessages)
+            {
+                Console.SetCursorPosition(0, logStartY + index);
+                Console.WriteLine(log);
+                index++;
+            }
         }
 
         public void PrintStats()
@@ -85,7 +104,12 @@ namespace RPG_wiedzmin_wanna_be
             Console.Write("################################");
             Console.SetCursorPosition(41, 10);
             Console.WriteLine("Player Inventory:");
-
+            int index = 0;
+            foreach(IItem item in player.inventory)
+            {
+                Console.SetCursorPosition(41, 11 + index++);
+                Console.Write(item.ToString());
+            }
         }
 
         public void PrintTileInfo()
@@ -94,6 +118,21 @@ namespace RPG_wiedzmin_wanna_be
             Console.Write("################################");
             Console.SetCursorPosition(80, 10);
             Console.WriteLine("Current tile:");
+            int index = 0;
+            Tile current_tile = world.map[player.pos_x, player.pos_y];
+            for (int i = 0; i < logLimit; i++)
+            {
+                Console.SetCursorPosition(80, 11 + i);
+                Console.Write("                                       ");
+            }
+            if (current_tile.items != null)
+            {
+                foreach (IItem item in current_tile.items)
+                {
+                    Console.SetCursorPosition(80, 11 + index++);
+                    Console.Write(item.ToString());
+                }
+            }
 
         }
 

@@ -1,4 +1,5 @@
 ﻿using RPG_wiedzmin_wanna_be.Items;
+using RPG_wiedzmin_wanna_be.Items.Weapons;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,8 @@ namespace RPG_wiedzmin_wanna_be
         public int agression { get; set; }
         public int wisdom {  get; set; }
 
+        public List<IItem> inventory;
+
         public IItem? RightHand;
         public IItem? LeftHand;
 
@@ -32,6 +35,9 @@ namespace RPG_wiedzmin_wanna_be
             this.luck = luck;
             this.agression = agression;
             this.wisdom = wisdom;
+            this.inventory = new List<IItem>();
+            inventory.Add(new Bow());
+            inventory.Add(new Sword());
         }
 
         public void print_player()
