@@ -21,7 +21,7 @@ namespace RPG_wiedzmin_wanna_be
             {
                 Console.Write("█");
             }
-            else if (tile.items != null)
+            else if (tile.items.Count > 0)
             {
                 Console.Write("I");
             }
@@ -102,13 +102,32 @@ namespace RPG_wiedzmin_wanna_be
         {
             Console.SetCursorPosition(41, 9);
             Console.Write("################################");
-            Console.SetCursorPosition(41, 10);
-            Console.WriteLine("Player Inventory:");
-            int index = 0;
-            foreach(IItem item in player.inventory)
+
+
+            for (int i = 0; i < logLimit; i++)
             {
+                Console.SetCursorPosition(41, 10 + i);
+                Console.Write("                                       ");
+            }
+            Console.SetCursorPosition(41, 10);
+
+            if (player.InInventory == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            Console.WriteLine("Player Inventory:");
+            Console.ResetColor();
+            int index = 0;
+            for(int i = 0; i < player.inventory.Count; i++)
+            {
+                IItem item = player.inventory[i];
+                if(player.inventory_pos == i && player.InInventory == true)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                }
                 Console.SetCursorPosition(41, 11 + index++);
-                Console.Write(item.ToString());
+                Console.Write(item);
+                Console.ResetColor();
             }
         }
 
@@ -134,6 +153,35 @@ namespace RPG_wiedzmin_wanna_be
                 }
             }
 
+        }
+
+        public bool TryPickUp()
+        {
+            Tile tile = world.map[player.pos_x, player.pos_y];
+            if (tile.items != null && tile.items.Count > 0)
+            {
+                player.inventory.Add(tile.items[0]);
+                tile.items.RemoveAt(0);
+                return true;
+            }
+            return false;
+        }
+
+        public bool DropItem()
+        {
+            if(player.InInventory == true)
+            {
+                if (player.inventory.Count > 0)
+                {
+                    Tile tile = world.map[player.pos_x, player.pos_y];
+                    tile.items.Add(player.inventory[player.inventory_pos]);
+                    player.inventory.RemoveAt(player.inventory_pos);
+                    return true;
+                }
+                else
+                    printLog("no item to drop");
+            }
+            return false;
         }
 
         public void PrintSteering()
@@ -200,25 +248,72 @@ namespace RPG_wiedzmin_wanna_be
                 switch (key.Key)
                 {
                     case ConsoleKey.W:
-                        TryWalk(player.pos_x, player.pos_y - 1);
+                        //move down
+                        if (player.InInventory == true)
+                        {
+                            if (player.inventory_pos > 0)
+                                player.inventory_pos--;
+                            else
+                                player.inventory_pos = player.inventory.Count - 1;
+                        }
+                        else
+                            TryWalk(player.pos_x, player.pos_y - 1);
                         break;
                     case ConsoleKey.S:
-                        TryWalk(player.pos_x,player.pos_y+1);
+                        //move up
+                        if (player.InInventory == true)
+                        {
+                            if (player.inventory_pos < player.inventory.Count -1)
+                                player.inventory_pos++;
+                            else
+                                player.inventory_pos = 0;
+                        }
+                        else
+                            TryWalk(player.pos_x,player.pos_y+1);
                         break;
                     case ConsoleKey.D:
                         //move right
+                        if(player.InInventory == false)
                         TryWalk(player.pos_x + 1, player.pos_y);
                         break;  
                     case ConsoleKey.A:
+                        if (player.InInventory == false)
                         TryWalk(player.pos_x - 1, player.pos_y);
                         //move left
                         break;
                     case ConsoleKey.E:
-                        //inventory
+                        if (player.InInventory == false)
+                        {
+                            player.InInventory = true;
+                            printLog("switch to inventory");
+                        }
+                        else
+                        {
+                            player.InInventory = false;
+                            player.inventory_pos = 0;
+                            printLog("switch out of inventory");
+                        }
                         break;
                     case ConsoleKey.F:
                         //equip
                         break;
+                     case ConsoleKey.Q:
+                        if (player.InInventory == false)
+                        {
+                            if (TryPickUp())
+                                printLog("item picked");
+                            else
+                                printLog("unable to pick up");
+                        }
+                        else
+                        {
+                            if (DropItem())
+                                printLog("item dropped");
+                            else
+                                printLog("bombing failed");
+                        }
+                        break;
+
                     case ConsoleKey.Escape:
 
                         return;

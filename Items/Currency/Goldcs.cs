@@ -12,5 +12,6 @@ namespace RPG_wiedzmin_wanna_be.Items.Currency
         public bool IsUsable => false;
         public int X_position { get; set; }
         public int Y_position { get; set; }
+        public string Name => "Gold";
     }
 }

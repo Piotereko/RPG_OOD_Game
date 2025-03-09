@@ -12,5 +12,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Randoms
 
         public int X_position {  get; set; }
         public int Y_position {get; set; }
+
+        public string Name => "LuckyBox";
     }
 }

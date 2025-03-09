@@ -24,6 +24,9 @@ namespace RPG_wiedzmin_wanna_be
 
         public IItem? RightHand;
         public IItem? LeftHand;
+        public bool InInventory = false;
+        public int inventory_pos = 0;
+        public bool InRightHand = true;
 
         public Player(int pos_x = 1, int pos_y = 1 , int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
         {
@@ -35,7 +38,10 @@ namespace RPG_wiedzmin_wanna_be
             this.luck = luck;
             this.agression = agression;
             this.wisdom = wisdom;
-            this.inventory = new List<IItem>();
+            inventory = new List<IItem>();
+            
+
+
             inventory.Add(new Bow());
             inventory.Add(new Sword());
         }
