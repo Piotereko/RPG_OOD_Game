@@ -5,13 +5,7 @@ namespace RPG_wiedzmin_wanna_be.Game
     internal class GameEngine
     {
         World world = new World();
-        Player player = new Player();
-
-        private Queue<string> logMessages = new Queue<string>(); //stores logs
-        private const int logLimit = 5;
-        private const int logStartY = 24;
-
-        
+        Player player = new Player(); 
         public bool TryPickUp()
         {
             Tile tile = world.map[player.pos_x, player.pos_y];
@@ -148,9 +142,6 @@ namespace RPG_wiedzmin_wanna_be.Game
                 }
             }
         }
-
-
-
 
         public void TryWalk(int new_x, int new_y)
         {
