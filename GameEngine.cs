@@ -61,6 +61,8 @@ namespace RPG_wiedzmin_wanna_be
                 logMessages.Dequeue();
             }
             logMessages.Enqueue(msg);
+            Console.SetCursorPosition(0, logStartY-1);
+            Console.WriteLine("Logs:");
             for (int i = 0; i < logLimit; i++)
             {
                 Console.SetCursorPosition(0, logStartY + i);
@@ -183,11 +185,17 @@ namespace RPG_wiedzmin_wanna_be
                 if (player.inventory.Count > 0)
                 {
                     Tile tile = world.map[player.pos_x, player.pos_y];
+                    IItem item = tile.items[player.inventory_pos]; //item to drop
 
-                    player.inventory[player.inventory_pos].DropMe(player);
+                    item.X_position = player.pos_x; item.Y_position = player.pos_y;
+                    item.DropMe(player); 
 
-                    tile.items.Add(player.inventory[player.inventory_pos]);
+                    tile.items.Add(item);
                     player.inventory.RemoveAt(player.inventory_pos);
+
+                    if (player.inventory_pos == player.inventory.Count) //if we drop last item from inventowy we need to go to previous one
+                        player.inventory_pos--;
+
                     return true;
                 }
                 else
@@ -203,24 +211,25 @@ namespace RPG_wiedzmin_wanna_be
                 printLog("no items to equip");
                 return;
             }
+
             IItem item = player.inventory[player.inventory_pos];
+
             if (!item.IsEquipable)
             {
                 printLog($"{item} cannot be equipped");
                 return;
             }
+
             if (item.IsTwoHanded)
             {
                 if (player.RightHand != null || player.LeftHand != null)
                 {
-                    printLog("one hand is occupied");
+                    printLog("Cannot equip: Hands are occupied. ");
                     return;
                 }
-                else
-                {
-                    player.RightHand = item;
-                    player.LeftHand = item;
-                }
+                player.RightHand = item;
+                player.LeftHand = item;
+
             }
             else
             {
@@ -230,7 +239,7 @@ namespace RPG_wiedzmin_wanna_be
                         player.RightHand = item;
                     else
                     {
-                        printLog("right hand occupied");
+                        printLog("Right hand occupied");
                         return;
                     }
 
@@ -247,10 +256,11 @@ namespace RPG_wiedzmin_wanna_be
                 }
             }
             player.inventory.Remove(item);
+            printLog($"{item} equipped");
         }
         public void Unequip()
         {
-            
+
             if (player.InRightHand == true)
             {
                 if (player.RightHand == null)
@@ -285,13 +295,13 @@ namespace RPG_wiedzmin_wanna_be
 
         public void PrintHands()
         {
-            for (int i = 0;i < 2; i++)
+            for (int i = 0; i < 2; i++)
             {
                 Console.SetCursorPosition(0, 20 + i);
                 Console.Write("                                  ");
             }
             Console.SetCursorPosition(0, 20);
-            
+
             if (player.InRightHand == false)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
@@ -299,7 +309,7 @@ namespace RPG_wiedzmin_wanna_be
             Console.Write("Left Hand: " + player.LeftHand);
             Console.ResetColor();
             Console.SetCursorPosition(0, 21);
-            if(player.InRightHand == true)
+            if (player.InRightHand == true)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
@@ -330,24 +340,21 @@ namespace RPG_wiedzmin_wanna_be
 
         }
 
-        public bool TryWalk(int new_x, int new_y)
+        public void TryWalk(int new_x, int new_y)
         {
             printLog("Trying to move to " + new_x + "," + new_y);
             if (world.map[new_x, new_y].IsWall)
             {
-                printLog("wall unable to move");
-                return false;
+                printLog("Unable to move: Wall");
+                return;
             }
-            else
-            {
-                printTile(player.pos_x, player.pos_y);
-                player.pos_x = new_x;
-                player.pos_y = new_y;
-                player.print_player();
-                //printLog("Player move correctly");
+       
+            printTile(player.pos_x, player.pos_y);
+            player.pos_x = new_x;
+            player.pos_y = new_y;
+            player.print_player();
 
-            }
-            return true;
+            return;
         }
 
 

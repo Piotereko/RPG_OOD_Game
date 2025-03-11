@@ -74,10 +74,8 @@ namespace RPG_wiedzmin_wanna_be
             }
             Axe axe = new Axe(10,4,4);
             Coins coin = new Coins(10, 5, 10);
-            //axe.X_position = 4; axe.Y_position = 4;
             Weapon sword = new Sword(15, 5, 5);
             sword = new PowerFulEffect(sword);
-           // sword = new UnluckyEffect(sword,player);
             map[5,5].items.Add(sword);
             map[4,4].items = new List<IItem> { axe};
             map[5, 10].items.Add(coin);
@@ -103,6 +101,24 @@ namespace RPG_wiedzmin_wanna_be
                     }
                 }
                 Console.WriteLine();
+            }
+        }
+
+        public void printTile(int x, int y)
+        {
+            Tile tile = map[x, y];
+            Console.SetCursorPosition(x, y);
+            if (tile.IsWall)
+            {
+                Console.Write("█");
+            }
+            else if (tile.items.Count > 0)
+            {
+                Console.Write("I");
+            }
+            else
+            {
+                Console.Write(" ");
             }
         }
 
