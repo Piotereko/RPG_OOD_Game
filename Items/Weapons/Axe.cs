@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {
-    internal class Axe:IWeapon
+    internal class Axe: Weapon
     {
-        public int damage { get; set; }
-        public bool IsTwoHanded => false;
-        public bool IsUsable => true;
-        public int X_position { get; set; }
-        public int Y_position { get; set; }
-        public string Name => "Axe";
+        public Axe(int _damage = 15, int pos_x  = 0, int pos_y = 0) : base("Axe",_damage, pos_x, pos_y) { }
+
     }
 }

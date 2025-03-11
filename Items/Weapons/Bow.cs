@@ -3,18 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {
-    internal class Bow : IWeapon
+    internal class Bow : Weapon
     {
-        public int damage { get; set; }
-
-        public bool IsTwoHanded => true;
-        public bool IsUsable => true;
-        public int X_position { get; set; }
-        public int Y_position { get; set; }
-
-        public string Name => "Bow";
+        public Bow(int _damage = 10, int pos_x  = 0, int pos_y = 0) : base("Bow",_damage, pos_x, pos_y) { }
     }
 }

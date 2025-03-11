@@ -1,6 +1,4 @@
 ﻿using RPG_wiedzmin_wanna_be.Items;
-using RPG_wiedzmin_wanna_be.Items.Weapons;
-using System.Diagnostics;
 
 namespace RPG_wiedzmin_wanna_be
 {
@@ -15,7 +13,7 @@ namespace RPG_wiedzmin_wanna_be
 
         public void printTile(int x, int y)
         {
-            Tile tile = world.map[x,y];
+            Tile tile = world.map[x, y];
             Console.SetCursorPosition(x, y);
             if (tile.IsWall)
             {
@@ -36,7 +34,7 @@ namespace RPG_wiedzmin_wanna_be
             {
                 for (int j = 0; j < _world.width; j++)
                 {
-                    if (_world.map[j, i].IsWall) 
+                    if (_world.map[j, i].IsWall)
                     {
                         Console.Write("█");
                     }
@@ -49,26 +47,26 @@ namespace RPG_wiedzmin_wanna_be
         }
         public void printItems()
         {
-            foreach(IItem item in world.items)
+            foreach (IItem item in world.items)
             {
                 Console.SetCursorPosition(item.X_position, item.Y_position);
                 Console.Write("I");
             }
         }
 
-        public void printLog(string  msg)
+        public void printLog(string msg)
         {
             if (logMessages.Count >= logLimit)
             {
-                logMessages.Dequeue(); 
+                logMessages.Dequeue();
             }
-            logMessages.Enqueue(msg); 
+            logMessages.Enqueue(msg);
             for (int i = 0; i < logLimit; i++)
             {
                 Console.SetCursorPosition(0, logStartY + i);
                 Console.Write(new string(' ', Console.WindowWidth));
             }
-            int index = 0; 
+            int index = 0;
             foreach (string log in logMessages)
             {
                 Console.SetCursorPosition(0, logStartY + index);
@@ -79,6 +77,11 @@ namespace RPG_wiedzmin_wanna_be
 
         public void PrintStats()
         {
+            for (int i = 0; i < 10; i++)
+            {
+                Console.SetCursorPosition(41, i);
+                Console.Write("                                       ");
+            }
             Console.SetCursorPosition(41, 0);
             Console.Write("################################");
             Console.SetCursorPosition(41, 1);
@@ -95,21 +98,26 @@ namespace RPG_wiedzmin_wanna_be
             Console.WriteLine("Agression: " + player.agression);
             Console.SetCursorPosition(41, 7);
             Console.WriteLine("Wisdom:    " + player.wisdom);
+            Console.SetCursorPosition(41, 8);
+            Console.WriteLine("Coins:     " + player.coins_amount);
+            Console.SetCursorPosition(41, 9);
+            Console.WriteLine("Gold:      " + player.gold_amount);
+
             //Console.SetCursorPosition(0, 0);
         }
 
         public void PrintInventory()
         {
-            Console.SetCursorPosition(41, 9);
+            Console.SetCursorPosition(41, 11);
             Console.Write("################################");
 
 
-            for (int i = 0; i < logLimit; i++)
+            for (int i = 0; i < player.inventory.Count + 2; i++)
             {
-                Console.SetCursorPosition(41, 10 + i);
+                Console.SetCursorPosition(41, 12 + i);
                 Console.Write("                                       ");
             }
-            Console.SetCursorPosition(41, 10);
+            Console.SetCursorPosition(41, 12);
 
             if (player.InInventory == true)
             {
@@ -118,14 +126,14 @@ namespace RPG_wiedzmin_wanna_be
             Console.WriteLine("Player Inventory:");
             Console.ResetColor();
             int index = 0;
-            for(int i = 0; i < player.inventory.Count; i++)
+            for (int i = 0; i < player.inventory.Count; i++)
             {
                 IItem item = player.inventory[i];
-                if(player.inventory_pos == i && player.InInventory == true)
+                if (player.inventory_pos == i && player.InInventory == true)
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
-                Console.SetCursorPosition(41, 11 + index++);
+                Console.SetCursorPosition(41, 13 + index++);
                 Console.Write(item);
                 Console.ResetColor();
             }
@@ -133,22 +141,22 @@ namespace RPG_wiedzmin_wanna_be
 
         public void PrintTileInfo()
         {
-            Console.SetCursorPosition(80, 9);
+            Console.SetCursorPosition(80, 11);
             Console.Write("################################");
-            Console.SetCursorPosition(80, 10);
+            Console.SetCursorPosition(80, 12);
             Console.WriteLine("Current tile:");
             int index = 0;
             Tile current_tile = world.map[player.pos_x, player.pos_y];
             for (int i = 0; i < logLimit; i++)
             {
-                Console.SetCursorPosition(80, 11 + i);
+                Console.SetCursorPosition(80, 13 + i);
                 Console.Write("                                       ");
             }
             if (current_tile.items != null)
             {
                 foreach (IItem item in current_tile.items)
                 {
-                    Console.SetCursorPosition(80, 11 + index++);
+                    Console.SetCursorPosition(80, 13 + index++);
                     Console.Write(item.ToString());
                 }
             }
@@ -160,6 +168,7 @@ namespace RPG_wiedzmin_wanna_be
             Tile tile = world.map[player.pos_x, player.pos_y];
             if (tile.items != null && tile.items.Count > 0)
             {
+                tile.items[0].PickMe(player);
                 player.inventory.Add(tile.items[0]);
                 tile.items.RemoveAt(0);
                 return true;
@@ -169,11 +178,14 @@ namespace RPG_wiedzmin_wanna_be
 
         public bool DropItem()
         {
-            if(player.InInventory == true)
+            if (player.InInventory == true)
             {
                 if (player.inventory.Count > 0)
                 {
                     Tile tile = world.map[player.pos_x, player.pos_y];
+
+                    player.inventory[player.inventory_pos].DropMe(player);
+
                     tile.items.Add(player.inventory[player.inventory_pos]);
                     player.inventory.RemoveAt(player.inventory_pos);
                     return true;
@@ -184,6 +196,119 @@ namespace RPG_wiedzmin_wanna_be
             return false;
         }
 
+        public void TryEuipItem()
+        {
+            if (player.inventory.Count == 0)
+            {
+                printLog("no items to equip");
+                return;
+            }
+            IItem item = player.inventory[player.inventory_pos];
+            if (!item.IsEquipable)
+            {
+                printLog($"{item} cannot be equipped");
+                return;
+            }
+            if (item.IsTwoHanded)
+            {
+                if (player.RightHand != null || player.LeftHand != null)
+                {
+                    printLog("one hand is occupied");
+                    return;
+                }
+                else
+                {
+                    player.RightHand = item;
+                    player.LeftHand = item;
+                }
+            }
+            else
+            {
+                if (player.InRightHand)
+                {
+                    if (player.RightHand == null)
+                        player.RightHand = item;
+                    else
+                    {
+                        printLog("right hand occupied");
+                        return;
+                    }
+
+                }
+                else
+                {
+                    if (player.LeftHand == null)
+                        player.LeftHand = item;
+                    else
+                    {
+                        printLog("left hand occupied");
+                        return;
+                    }
+                }
+            }
+            player.inventory.Remove(item);
+        }
+        public void Unequip()
+        {
+            
+            if (player.InRightHand == true)
+            {
+                if (player.RightHand == null)
+                {
+                    printLog("right hand is empty");
+                    return;
+                }
+                else
+                {
+                    player.inventory.Add(player.RightHand);
+                    if (player.RightHand.IsTwoHanded == true)
+                        player.LeftHand = null;
+                    player.RightHand = null;
+                }
+            }
+            else
+            {
+                if (player.LeftHand == null)
+                {
+                    printLog("left hand is empty");
+                    return;
+                }
+                else
+                {
+                    player.inventory.Add(player.LeftHand);
+                    if (player.LeftHand.IsTwoHanded == true)
+                        player.RightHand = null;
+                    player.LeftHand = null;
+                }
+            }
+        }
+
+        public void PrintHands()
+        {
+            for (int i = 0;i < 2; i++)
+            {
+                Console.SetCursorPosition(0, 20 + i);
+                Console.Write("                                  ");
+            }
+            Console.SetCursorPosition(0, 20);
+            
+            if (player.InRightHand == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            Console.Write("Left Hand: " + player.LeftHand);
+            Console.ResetColor();
+            Console.SetCursorPosition(0, 21);
+            if(player.InRightHand == true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+            }
+            Console.Write("Right Hand: " + player.RightHand);
+            Console.ResetColor();
+
+
+
+        }
         public void PrintSteering()
         {
             Console.SetCursorPosition(80, 0);
@@ -205,7 +330,7 @@ namespace RPG_wiedzmin_wanna_be
 
         }
 
-        public bool TryWalk(int  new_x, int new_y)
+        public bool TryWalk(int new_x, int new_y)
         {
             printLog("Trying to move to " + new_x + "," + new_y);
             if (world.map[new_x, new_y].IsWall)
@@ -220,7 +345,7 @@ namespace RPG_wiedzmin_wanna_be
                 player.pos_y = new_y;
                 player.print_player();
                 //printLog("Player move correctly");
-                
+
             }
             return true;
         }
@@ -233,7 +358,7 @@ namespace RPG_wiedzmin_wanna_be
             printItems();
             player.print_player();
             PrintSteering();
-            
+
 
 
             Console.SetCursorPosition(0, world.map.GetLength(1) + 2);
@@ -242,6 +367,7 @@ namespace RPG_wiedzmin_wanna_be
                 PrintStats();
                 PrintInventory();
                 PrintTileInfo();
+                PrintHands();
                 ConsoleKeyInfo key = Console.ReadKey(true);
 
 
@@ -263,22 +389,22 @@ namespace RPG_wiedzmin_wanna_be
                         //move up
                         if (player.InInventory == true)
                         {
-                            if (player.inventory_pos < player.inventory.Count -1)
+                            if (player.inventory_pos < player.inventory.Count - 1)
                                 player.inventory_pos++;
                             else
                                 player.inventory_pos = 0;
                         }
                         else
-                            TryWalk(player.pos_x,player.pos_y+1);
+                            TryWalk(player.pos_x, player.pos_y + 1);
                         break;
                     case ConsoleKey.D:
                         //move right
-                        if(player.InInventory == false)
-                        TryWalk(player.pos_x + 1, player.pos_y);
-                        break;  
+                        if (player.InInventory == false)
+                            TryWalk(player.pos_x + 1, player.pos_y);
+                        break;
                     case ConsoleKey.A:
                         if (player.InInventory == false)
-                        TryWalk(player.pos_x - 1, player.pos_y);
+                            TryWalk(player.pos_x - 1, player.pos_y);
                         //move left
                         break;
                     case ConsoleKey.E:
@@ -295,9 +421,18 @@ namespace RPG_wiedzmin_wanna_be
                         }
                         break;
                     case ConsoleKey.F:
-                        //equip
+                        if (player.InInventory == false)
+                        {
+                            printLog("unequping item");
+                            Unequip();
+                        }
+                        else
+                        {
+                            printLog("equping item");
+                            TryEuipItem();
+                        }
                         break;
-                     case ConsoleKey.Q:
+                    case ConsoleKey.Q:
                         if (player.InInventory == false)
                         {
                             if (TryPickUp())
@@ -313,7 +448,16 @@ namespace RPG_wiedzmin_wanna_be
                                 printLog("bombing failed");
                         }
                         break;
-
+                    case ConsoleKey.R:
+                        //changing hand
+                        printLog("changing hands");
+                        if (player.InRightHand)
+                        {
+                            player.InRightHand = false;
+                        }
+                        else
+                            player.InRightHand = true;
+                        break;
                     case ConsoleKey.Escape:
 
                         return;

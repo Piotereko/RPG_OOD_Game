@@ -6,14 +6,20 @@ using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be.Items.Currency
 {
-    internal class Coins : ICurrency
+    internal class Coins : Currency
     {
-        public int amount { get ; set; }
+        public Coins(int value, int pos_x, int pos_y) :base("Coins",value,pos_x,pos_y) { }
 
-        public bool IsUsable => false;
-        public int X_position { get; set; }
-        public int Y_position { get; set; }
-        bool IItem.IsUsable => false;
-        public string Name => "Coins";
+        public override void PickMe(Player player)
+        {
+            player.coins_amount += Value;
+        }
+
+        public override void DropMe(Player player)
+        {
+            player.coins_amount -= Value;
+        }
+
+
     }
 }

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be.Items.Randoms
 {
-    internal class LuckyBox : Random
+    internal class Cocaine : Random
     {
-        public LuckyBox(int pos_x, int pos_y) :base("LuckyBox",pos_x,pos_y) { }
+       public Cocaine(int pos_x  = 0, int pos_y = 0): base("Cocaine",pos_x,pos_y) { }
     }
 }

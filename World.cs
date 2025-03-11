@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Items;
+using RPG_wiedzmin_wanna_be.Items.Currency;
 using RPG_wiedzmin_wanna_be.Items.Weapons;
 
 namespace RPG_wiedzmin_wanna_be
@@ -71,10 +72,20 @@ namespace RPG_wiedzmin_wanna_be
                 map[i,3].IsWall = true;
                 map[i, 16].IsWall = true;
             }
-            Axe axe = new Axe();
-            axe.X_position = 4; axe.Y_position = 4;
+            Axe axe = new Axe(10,4,4);
+            Coins coin = new Coins(10, 5, 10);
+            //axe.X_position = 4; axe.Y_position = 4;
+            Weapon sword = new Sword(15, 5, 5);
+            sword = new PowerFulEffect(sword);
+           // sword = new UnluckyEffect(sword,player);
+            map[5,5].items.Add(sword);
             map[4,4].items = new List<IItem> { axe};
+            map[5, 10].items.Add(coin);
             items.Add(axe);
+            items.Add(coin);
+            items.Add(sword);
+
+            
         }
         public void printWorld()
         {
