@@ -47,5 +47,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         {
             return true;
         }
+        public virtual void ApplyEffects(IEntity entity) { }
+        public virtual void RemoveEffects(IEntity entity) { }
     }
 }

@@ -20,6 +20,8 @@ namespace RPG_wiedzmin_wanna_be.Items
         void DropMe(Player player);
 
         bool EquipMe(Player player);
+        public void ApplyEffects(IEntity entity) { }
+        public void RemoveEffects(IEntity entity) { }
 
 
         string ToString();

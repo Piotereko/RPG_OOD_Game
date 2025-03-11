@@ -185,7 +185,7 @@ namespace RPG_wiedzmin_wanna_be
                 if (player.inventory.Count > 0)
                 {
                     Tile tile = world.map[player.pos_x, player.pos_y];
-                    IItem item = tile.items[player.inventory_pos]; //item to drop
+                    IItem item = player.inventory[player.inventory_pos]; //item to drop
 
                     item.X_position = player.pos_x; item.Y_position = player.pos_y;
                     item.DropMe(player); 
@@ -229,7 +229,7 @@ namespace RPG_wiedzmin_wanna_be
                 }
                 player.RightHand = item;
                 player.LeftHand = item;
-
+                
             }
             else
             {
@@ -255,6 +255,11 @@ namespace RPG_wiedzmin_wanna_be
                     }
                 }
             }
+            if(player.inventory_pos == player.inventory.Count)
+            {
+                player.inventory_pos--;
+            }
+            player.ApplyEffect(item);
             player.inventory.Remove(item);
             printLog($"{item} equipped");
         }
@@ -271,6 +276,7 @@ namespace RPG_wiedzmin_wanna_be
                 else
                 {
                     player.inventory.Add(player.RightHand);
+                    player.RemoveEffect(player.RightHand);
                     if (player.RightHand.IsTwoHanded == true)
                         player.LeftHand = null;
                     player.RightHand = null;
@@ -285,6 +291,7 @@ namespace RPG_wiedzmin_wanna_be
                 }
                 else
                 {
+                    player.RemoveEffect(player.LeftHand);
                     player.inventory.Add(player.LeftHand);
                     if (player.LeftHand.IsTwoHanded == true)
                         player.RightHand = null;
