@@ -1,4 +1,6 @@
-﻿namespace RPG_wiedzmin_wanna_be
+﻿using RPG_wiedzmin_wanna_be.Game;
+
+namespace RPG_wiedzmin_wanna_be
 {
     internal class Program
     {

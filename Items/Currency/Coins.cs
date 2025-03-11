@@ -8,7 +8,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Currency
 {
     internal class Coins : Currency
     {
-        public Coins(int value, int pos_x, int pos_y) :base("Coins",value,pos_x,pos_y) { }
+        public Coins(int pos_x = 1, int pos_y = 1, int value = 10 ) :base("Coins",value,pos_x,pos_y) { }
 
         public override void PickMe(Player player)
         {

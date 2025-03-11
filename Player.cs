@@ -46,14 +46,10 @@ namespace RPG_wiedzmin_wanna_be
 
             gold_amount = 0;
             coins_amount = 0;
-            inventory = [new Bow(), new Sword()];
+            inventory = new List<IItem>();
         }
 
-        public void print_player()
-        {
-            Console.SetCursorPosition(pos_x, pos_y);
-            Console.WriteLine("B");
-        }
+        
 
         public void ApplyEffect(IItem _item)
         {

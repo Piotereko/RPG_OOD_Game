@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Items;
@@ -72,60 +73,26 @@ namespace RPG_wiedzmin_wanna_be
                 map[i,3].IsWall = true;
                 map[i, 16].IsWall = true;
             }
-            Axe axe = new Axe(10,4,4);
-            Coins coin = new Coins(10, 5, 10);
-            Weapon sword = new Sword(15, 5, 5);
-            sword = new PowerFulEffect(sword);
-            map[5,5].items.Add(sword);
-            map[4,4].items = new List<IItem> { axe};
             
-            Weapon bow = new Bow(10, 2, 6);
-            bow = new UnluckyEffect(bow);
-            map[2, 6].items.Add(bow);
+            AddItem(new Axe(4, 4));
+            AddItem(new Bow(5, 5));
+            AddItem(new Gold(4, 4));
+            AddItem(new Coins(25, 12,100));
+            IItem powerfulunluckysword = new UnluckyEffect(new PowerFulEffect(new Sword(5, 6)));
+            IItem unluckyaxe = new UnluckyEffect(new Axe(4, 4));
+            IItem twohandedbow = new TwoHandnes(new Bow(5, 5));
+            IItem powerfulbow = new PowerFulEffect(new Bow(6, 6));
+            AddItem(powerfulunluckysword);
+            AddItem(twohandedbow);
+            AddItem(unluckyaxe);
+            AddItem(powerfulbow);
 
-            map[5, 10].items.Add(coin);
-            items.Add(axe);
-            items.Add(coin);
-            items.Add(sword);
-            items.Add(bow);
             
         }
-        public void printWorld()
+        public void AddItem(IItem item)
         {
-            for(int i = 0; i < height; i++ )
-            {
-                for(int j = 0; j < width; j++ )
-                {
-                    if (map[i,j].IsWall)
-                    {
-                        Console.Write("█");
-                    }
-                    else
-                    {
-                        Console.Write(" ");
-                    }
-                }
-                Console.WriteLine();
-            }
+            map[item.X_position, item.Y_position].items.Add(item);
+            items.Add(item);
         }
-
-        public void printTile(int x, int y)
-        {
-            Tile tile = map[x, y];
-            Console.SetCursorPosition(x, y);
-            if (tile.IsWall)
-            {
-                Console.Write("█");
-            }
-            else if (tile.items.Count > 0)
-            {
-                Console.Write("I");
-            }
-            else
-            {
-                Console.Write(" ");
-            }
-        }
-
     }
 }
