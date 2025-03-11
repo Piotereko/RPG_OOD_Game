@@ -44,5 +44,10 @@ namespace RPG_wiedzmin_wanna_be.Items.Randoms
         {
             return true;
         }
+
+        public void ApplyEffects(IEntity entity)
+        {
+            return;
+        }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be
 {
-    public class Player
+    public class Player : IEntity
     {
         public int pos_x {  get; set; }
         public int pos_y { get; set; }
@@ -53,6 +53,15 @@ namespace RPG_wiedzmin_wanna_be
         {
             Console.SetCursorPosition(pos_x, pos_y);
             Console.WriteLine("B");
+        }
+
+        public void ApplyEffect(IItem _item)
+        {
+            _item.ApplyEffects(this);
+        }
+        public void RemoveEffect(IItem _item)
+        {
+            _item.RemoveEffects(this);
         }
     }
 }

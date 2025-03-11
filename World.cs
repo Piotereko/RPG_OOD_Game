@@ -78,11 +78,16 @@ namespace RPG_wiedzmin_wanna_be
             sword = new PowerFulEffect(sword);
             map[5,5].items.Add(sword);
             map[4,4].items = new List<IItem> { axe};
+            
+            Weapon bow = new Bow(10, 2, 6);
+            bow = new UnluckyEffect(bow);
+            map[2, 6].items.Add(bow);
+
             map[5, 10].items.Add(coin);
             items.Add(axe);
             items.Add(coin);
             items.Add(sword);
-
+            items.Add(bow);
             
         }
         public void printWorld()

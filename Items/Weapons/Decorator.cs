@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,7 +14,6 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         {
             weapon = _weapon;
         }
-
         public override string ToString()
         {
             return weapon.ToString();
@@ -26,7 +26,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         {
             damage += 5;
         }
-
+        
         public override string ToString() 
         {
             return $"{weapon} (PowerFul)";
@@ -35,11 +35,18 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
 
     public class UnluckyEffect : Decorator
     {
-        public UnluckyEffect(Weapon weapon, Player player) : base(weapon)
+        public UnluckyEffect(Weapon weapon) : base(weapon)
         {
-            player.luck -= 5; 
+            
         }
-
+        public override void ApplyEffects(IEntity entity)
+        {
+            entity.luck -= 5;
+        }
+        public override void RemoveEffects(IEntity entity)
+        {
+            entity.luck += 5;
+        }
         public override string ToString()
         {
             return $"{weapon} (Unlucky)";
