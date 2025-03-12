@@ -78,7 +78,7 @@ namespace RPG_wiedzmin_wanna_be
             AddItem(new Bow(5, 5));
             AddItem(new Gold(4, 4));
             AddItem(new Coins(25, 12,100));
-            IItem powerfulunluckysword = new UnluckyEffect(new PowerFulEffect(new Sword(5, 6)));
+            Weapon powerfulunluckysword = new UnluckyEffect(new PowerFulEffect(new Sword(5, 6)));
             IItem unluckyaxe = new UnluckyEffect(new Axe(4, 4));
             IItem twohandedbow = new TwoHandnes(new Bow(5, 5));
             IItem powerfulbow = new PowerFulEffect(new Bow(6, 6));

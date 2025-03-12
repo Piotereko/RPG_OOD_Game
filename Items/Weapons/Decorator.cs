@@ -14,6 +14,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         {
             weapon = _weapon;
         }
+        public override int Damage => weapon.damage;
         public override string ToString()
         {
             return weapon.ToString();
@@ -24,9 +25,9 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
     {
         public PowerFulEffect(Weapon weapon) : base(weapon)
         {
-            damage += 5;
         }
-        
+        public override int Damage => weapon.Damage + 100;
+
         public override string ToString() 
         {
             return $"{weapon} (PowerFul)";
@@ -49,7 +50,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         }
         public override string ToString()
         {
-            return $"{weapon} (Unlucky)";
+            return $"{weapon} (Unlucky) ";
         }
     }
 

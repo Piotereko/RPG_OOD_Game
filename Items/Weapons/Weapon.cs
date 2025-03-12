@@ -21,6 +21,8 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         public int Y_position { get; set; }
         public bool IsTwoHanded {  get; set; } = false;
 
+        public virtual int Damage => damage;
+
         public Weapon(string name, int _damage, int pos_x, int pos_y)
         {
             Name = name;
@@ -30,7 +32,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         }
         public override string ToString()
         {
-            return $"{Name}";
+            return $"{Name} ({Damage})";
         }
 
         void IItem.PickMe(Player player)
