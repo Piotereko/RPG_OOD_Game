@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using RPG_wiedzmin_wanna_be.Entity;
 
 namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {

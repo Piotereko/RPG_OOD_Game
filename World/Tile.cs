@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Items;
 
-namespace RPG_wiedzmin_wanna_be
+namespace RPG_wiedzmin_wanna_be.World
 {
     internal class Tile
     {
@@ -13,7 +13,7 @@ namespace RPG_wiedzmin_wanna_be
         public int pos_y;
         public List<IItem> items;
         public bool IsWall { get; set; }
-        public Tile() 
+        public Tile()
         {
             items = null;
             IsWall = false;

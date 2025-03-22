@@ -1,4 +1,6 @@
-﻿using RPG_wiedzmin_wanna_be.Items;
+﻿using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Items;
+using RPG_wiedzmin_wanna_be.World;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,9 +29,13 @@ namespace RPG_wiedzmin_wanna_be.Game
             {
                 Console.Write("█");
             }
-            else if (tile.items.Count > 0)
+            else if (tile.items.Count > 1)
             {
-                Console.Write("I");
+                Console.Write("M");
+            }
+            else if(tile.items.Count > 0)
+            {
+                Console.Write(tile.items[0].GetType().ToString()[28]);
             }
             else
             {
@@ -39,7 +45,7 @@ namespace RPG_wiedzmin_wanna_be.Game
 
 
 
-        public static void printWorld(World _world)
+        public static void printWorld(Dungeon _world)
         {
             for (int i = 0; i < _world.height; i++)
             {
@@ -59,12 +65,24 @@ namespace RPG_wiedzmin_wanna_be.Game
 
 
 
-        public static void printItems(World world)
+        public static void printItems(Dungeon world)
         {
             foreach (IItem item in world.items)
             {
                 Console.SetCursorPosition(item.X_position, item.Y_position);
-                Console.Write("I");
+                Tile tile = world.map[item.X_position,item.Y_position];
+                if (tile.items.Count > 1)
+                {
+                    Console.Write("M");
+                }
+                else if (tile.items.Count > 0)
+                {
+                    Console.Write(item.GetType().ToString()[28]);
+                }
+                else
+                {
+                    Console.Write(" ");
+                }
             }
         }
 
@@ -134,7 +152,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             Console.SetCursorPosition(80, 12);
             Console.WriteLine("Current tile:");
 
-            ClearArea(80, 13, 30, 15);
+            ClearArea(80, 13, 35, 15);
 
             int index = 0;
             if (tile.items != null)

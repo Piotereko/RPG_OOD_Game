@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPG_wiedzmin_wanna_be
+namespace RPG_wiedzmin_wanna_be.Entity
 {
     public interface IEntity
     {

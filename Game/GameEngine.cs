@@ -1,14 +1,31 @@
-﻿using RPG_wiedzmin_wanna_be.Items;
+﻿using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Items;
+using RPG_wiedzmin_wanna_be.World;
 
 namespace RPG_wiedzmin_wanna_be.Game
 {
     internal class GameEngine
     {
-        World world = new World();
-        Player player = new Player(); 
+        private Dungeon dungeon;
+        private Player player = new Player();
+        private IDungeonBuilder builder;
+        private DungeonDirector director;
+
+        public GameEngine()
+        {
+            builder = new DungeonBuilder();
+            director = new DungeonDirector(builder);
+        }
+
+        public void CreateDungeon()
+        {
+            dungeon = director.CreateTest();
+        }
+        
+
         public bool TryPickUp()
         {
-            Tile tile = world.map[player.pos_x, player.pos_y];
+            Tile tile = dungeon.map[player.pos_x, player.pos_y];
             if (tile.items != null && tile.items.Count > 0)
             {
                 tile.items[0].PickMe(player);
@@ -25,7 +42,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             {
                 if (player.inventory.Count > 0)
                 {
-                    Tile tile = world.map[player.pos_x, player.pos_y];
+                    Tile tile = dungeon.map[player.pos_x, player.pos_y];
                     IItem item = player.inventory[player.inventory_pos]; //item to drop
 
                     item.X_position = player.pos_x; item.Y_position = player.pos_y;
@@ -146,13 +163,13 @@ namespace RPG_wiedzmin_wanna_be.Game
         public void TryWalk(int new_x, int new_y)
         {
             Logger.PrintLog("Trying to move to " + new_x + "," + new_y);
-            if (world.map[new_x, new_y].IsWall)
+            if (dungeon.map[new_x, new_y].IsWall)
             {
                 Logger.PrintLog("Unable to move: Wall");
                 return;
             }
 
-            Render.printTile(world.map[player.pos_x, player.pos_y]);
+            Render.printTile(dungeon.map[player.pos_x, player.pos_y]);
             player.pos_x = new_x;
             player.pos_y = new_y;
             Render.PrintPlayer(player);
@@ -162,10 +179,12 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void Run()
         {
+            CreateDungeon();
+
             Console.Clear();
             Console.CursorVisible = false;
-            Render.printWorld(world);
-            Render.printItems(world);
+            Render.printWorld(dungeon);
+            Render.printItems(dungeon);
             Render.PrintPlayer(player);
             Render.PrintSteering();
 
@@ -173,7 +192,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             {
                 Render.PrintStats(player);
                 Render.PrintInventory(player);
-                Render.PrintTileInfo(world.map[player.pos_x, player.pos_y]);
+                Render.PrintTileInfo(dungeon.map[player.pos_x, player.pos_y]);
                 Render.PrintHands(player);
 
                 ConsoleKeyInfo key = Console.ReadKey(true);

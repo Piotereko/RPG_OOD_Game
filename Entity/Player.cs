@@ -7,18 +7,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RPG_wiedzmin_wanna_be
+namespace RPG_wiedzmin_wanna_be.Entity
 {
     public class Player : IEntity
     {
-        public int pos_x {  get; set; }
+        public int pos_x { get; set; }
         public int pos_y { get; set; }
         public int strength { get; set; }
-        public int dexterity {  get; set; }
+        public int dexterity { get; set; }
         public int health { get; set; }
         public int luck { get; set; }
         public int agression { get; set; }
-        public int wisdom {  get; set; }
+        public int wisdom { get; set; }
 
         public List<IItem> inventory;
 
@@ -29,11 +29,11 @@ namespace RPG_wiedzmin_wanna_be
         public int inventory_pos = 0;
         public bool InRightHand = true;
 
-        
+
         public int gold_amount { get; set; }
         public int coins_amount { get; set; }
 
-        public Player(int pos_x = 1, int pos_y = 1 , int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
+        public Player(int pos_x = 1, int pos_y = 1, int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
         {
             this.pos_x = pos_x;
             this.pos_y = pos_y;
@@ -49,7 +49,7 @@ namespace RPG_wiedzmin_wanna_be
             inventory = new List<IItem>();
         }
 
-        
+
 
         public void ApplyEffect(IItem _item)
         {
