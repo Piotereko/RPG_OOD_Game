@@ -35,7 +35,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
             else if(tile.items.Count > 0)
             {
-                Console.Write(tile.items[0].GetType().ToString()[28]);
+                printItem(tile.items[0]);
             }
             else
             {
@@ -43,7 +43,34 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
         }
 
-
+        public static void printItem(IItem item) 
+        {
+            switch (item.ItemSign())
+            {
+                case '$':
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("$");
+                    break;
+                case 'P':
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.Write("P");
+                    break;
+                case 'W':
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.Write("W");
+                    break;
+                case 'R':
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.Write("R");
+                    break;
+                case 'O':
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write("W");
+                    break;
+            }
+            //Console.Write(item.GetType().ToString()[28]);
+            Console.ResetColor();
+        }
 
         public static void printWorld(Dungeon _world)
         {
@@ -77,7 +104,7 @@ namespace RPG_wiedzmin_wanna_be.Game
                 }
                 else if (tile.items.Count > 0)
                 {
-                    Console.Write(item.GetType().ToString()[28]);
+                    printItem(item);
                 }
                 else
                 {
@@ -212,7 +239,9 @@ namespace RPG_wiedzmin_wanna_be.Game
         public static void PrintPlayer(Player player)
         {
             Console.SetCursorPosition(player.pos_x, player.pos_y);
-            Console.WriteLine("B");
+            Console.ForegroundColor= ConsoleColor.Blue;
+            Console.WriteLine("@");
+            Console.ResetColor();
         }
     }
 }

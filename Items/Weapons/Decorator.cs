@@ -15,6 +15,10 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         {
             weapon = _weapon;
         }
+        public override char ItemSign()
+        {
+            return 'O';
+        }
         public override int Damage => weapon.damage;
         public override string ToString()
         {

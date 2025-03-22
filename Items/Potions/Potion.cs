@@ -1,26 +1,26 @@
-﻿using System;
+﻿using RPG_wiedzmin_wanna_be.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using RPG_wiedzmin_wanna_be.Entity;
 
-namespace RPG_wiedzmin_wanna_be.Items.Randoms
+namespace RPG_wiedzmin_wanna_be.Items.Potions
 {
-    internal class Random : IItem
+    internal abstract class Potion : IItem
     {
         public string Name { get; }
 
         public bool IsUsable => false;
 
-        public bool IsEquipable => false;
+        public bool IsEquipable => true;
 
-        public bool IsTwoHanded { get => false; set {  } }
+        public bool IsTwoHanded { get => false; set { } }
 
-        public int X_position {get; set;}
-        public int Y_position {get;set;}
+        public int X_position { get; set; }
+        public int Y_position { get; set; }
 
-        public Random(string name, int x_position, int y_position)
+        public Potion(string name, int x_position, int y_position)
         {
             Name = name;
             X_position = x_position;
@@ -46,10 +46,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Randoms
             return true;
         }
 
-        public void ApplyEffects(IEntity entity)
-        {
-            return;
-        }
+        public abstract void ApplyEffects(IEntity entity);
 
         public void RemoveEffects(IEntity entity)
         {
@@ -58,7 +55,8 @@ namespace RPG_wiedzmin_wanna_be.Items.Randoms
 
         public char ItemSign()
         {
-            return 'R';
+           return 'P';
         }
     }
 }
+

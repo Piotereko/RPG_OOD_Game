@@ -47,5 +47,15 @@ namespace RPG_wiedzmin_wanna_be.Items.Currency
         {
             return;
         }
+
+        public void RemoveEffects(IEntity entity)
+        {
+            return;
+        }
+
+        public char ItemSign()
+        {
+            return '$';
+        }
     }
 }
