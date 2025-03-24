@@ -12,7 +12,22 @@ namespace RPG_wiedzmin_wanna_be.Game
 {
     internal class Render
     {
-        public static void ClearArea(int x, int y, int width, int height)
+        private static Render instance;
+
+        private Render() { }
+
+        public static Render Instance
+        {
+            get
+            {
+                if (instance == null)
+                {
+                    instance = new Render();
+                }
+                return instance;
+            }
+        }
+        public void ClearArea(int x, int y, int width, int height)
         {
             for (int i = 0; i < height; i++)
             {
@@ -22,7 +37,7 @@ namespace RPG_wiedzmin_wanna_be.Game
         }
 
 
-        public static void printTile(Tile tile)
+        public void printTile(Tile tile)
         {
             Console.SetCursorPosition(tile.pos_x, tile.pos_y);
             if (tile.IsWall)
@@ -43,7 +58,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
         }
 
-        public static void printItem(IItem item) 
+        public void printItem(IItem item) 
         {
             switch (item.ItemSign())
             {
@@ -72,7 +87,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             Console.ResetColor();
         }
 
-        public static void printWorld(Dungeon _world)
+        public void printWorld(Dungeon _world)
         {
             for (int i = 0; i < _world.height; i++)
             {
@@ -92,7 +107,7 @@ namespace RPG_wiedzmin_wanna_be.Game
 
 
 
-        public static void printItems(Dungeon world)
+        public void printItems(Dungeon world)
         {
             foreach (IItem item in world.items)
             {
@@ -114,7 +129,7 @@ namespace RPG_wiedzmin_wanna_be.Game
         }
 
 
-        public static void PrintStats(Player player)
+        public void PrintStats(Player player)
         {
 
             ClearArea(41, 0, 20, 15);
@@ -142,7 +157,7 @@ namespace RPG_wiedzmin_wanna_be.Game
 
 
 
-        public static void PrintInventory(Player player)
+        public void PrintInventory(Player player)
         {
             Console.SetCursorPosition(41, 11);
             Console.Write("################################");
@@ -172,7 +187,7 @@ namespace RPG_wiedzmin_wanna_be.Game
         }
 
 
-        public static void PrintTileInfo(Tile tile)
+        public void PrintTileInfo(Tile tile)
         {
             Console.SetCursorPosition(80, 11);
             Console.Write("################################");
@@ -194,9 +209,9 @@ namespace RPG_wiedzmin_wanna_be.Game
 
 
 
-        public static void PrintSteering()
+        public void PrintSteering(Dungeon dungeon, Player player)
         {
-            Console.SetCursorPosition(80, 0);
+            /*Console.SetCursorPosition(80, 0);
             Console.Write("##################################");
             Console.SetCursorPosition(80, 1);
             Console.Write("Steering:");
@@ -209,12 +224,45 @@ namespace RPG_wiedzmin_wanna_be.Game
             Console.SetCursorPosition(80, 5);
             Console.Write("Q - inventory");
             Console.SetCursorPosition(80, 6);
-            Console.Write("R - swap hands");
+            Console.Write("R - swap hands");*/
+
+            InstructionBuilder instructionBuilder = new InstructionBuilder();
+
+            instructionBuilder.AddMovement();
+                               
+                               
+            if (dungeon.HasWeapons || dungeon.HasPotions)
+            {
+                instructionBuilder.AddEquipInstruction(dungeon.HasWeapons, dungeon.HasPotions);
+            }
+            if (dungeon.HasItems || player.inventory.Count > 0)
+            {
+                instructionBuilder.AddPickupItemInstruction(dungeon.HasItems, player.inventory.Count > 0);
+            }
+
+            instructionBuilder.AddInventoryInstruction()
+                               .AddSwapHandsInstruction();
+
+            List<string> instructions = instructionBuilder.Build();
+
+            ClearArea(80, 0, 40, 10);
+
+            Console.SetCursorPosition(80, 0);
+            Console.Write("##################################");
+            Console.SetCursorPosition(80, 1);
+            Console.Write("Steering:");
+
+            int line = 2;
+            foreach (var instruction in instructions)
+            {
+                Console.SetCursorPosition(80, line++);
+                Console.Write(instruction);
+            }
         }
 
 
 
-        public static void PrintHands(Player player)
+        public void PrintHands(Player player)
         {
             ClearArea(0, 20, 40, 2);
 
@@ -235,13 +283,31 @@ namespace RPG_wiedzmin_wanna_be.Game
             Console.ResetColor();
         }
 
-
-        public static void PrintPlayer(Player player)
+        public void PrintPlayer(Player player)
         {
             Console.SetCursorPosition(player.pos_x, player.pos_y);
             Console.ForegroundColor= ConsoleColor.Blue;
             Console.WriteLine("@");
             Console.ResetColor();
+        }
+
+        public void PrintLogs()
+        {
+            int logStartY = 24; 
+            Console.SetCursorPosition(0, logStartY - 1);
+            Console.WriteLine("Logs:");
+
+           
+
+            ClearArea(0, logStartY, 40, 5);
+           
+            int index = 0;
+            foreach (var log in Logger.GetLogs())
+            {
+                Console.SetCursorPosition(0, logStartY + index);
+                Console.WriteLine(log);
+                index++;
+            }
         }
     }
 }

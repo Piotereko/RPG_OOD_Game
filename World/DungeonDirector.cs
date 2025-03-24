@@ -8,22 +8,30 @@ namespace RPG_wiedzmin_wanna_be.World
 {
     internal class DungeonDirector
     {
-        private IDungeonBuilder _builder;
+        private DungeonBuilder builder;
 
-        public DungeonDirector(IDungeonBuilder builder)
+        public DungeonDirector(DungeonBuilder _builder)
         {
-            _builder = builder;
+            builder = _builder;
+        }
+
+        public void BuildBasicDungeon()
+        {
+            builder.EmptyDungeon();
+            builder.FilledDungeon();
+                            
         }
         public Dungeon CreateTest()
         {
-            return _builder.EmptyDungeon()
-                           .FilledDungeon()
-                           .AddPaths()
-                           .AddCentralRoom()
-                           .AddChambers()
-                           .AddItems()
-                           .Build();
-                            
+            BuildBasicDungeon();
+            
+            builder.AddPaths();
+            builder.AddCentralRoom();
+            builder.AddChambers();
+            builder.AddItems();
+            
+            return builder.Build();
+              
         }
     }
 }

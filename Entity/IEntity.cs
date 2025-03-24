@@ -16,5 +16,7 @@ namespace RPG_wiedzmin_wanna_be.Entity
         public int luck { get; set; }
         public int agression { get; set; }
         public int wisdom { get; set; }
+
+        char EntitySing();
     }
 }

@@ -8,16 +8,16 @@ namespace RPG_wiedzmin_wanna_be.World
 {
     internal interface IDungeonBuilder
     {
-        IDungeonBuilder EmptyDungeon();
-        IDungeonBuilder FilledDungeon();
-        IDungeonBuilder AddPaths();
-        IDungeonBuilder AddChambers();
-        IDungeonBuilder AddCentralRoom();
-        IDungeonBuilder AddItems();
-        IDungeonBuilder AddWeapons();
-        IDungeonBuilder AddModifiedWeapons();
-        IDungeonBuilder AddPotions();
-        IDungeonBuilder AddEnemies();
-        Dungeon Build();
+        void EmptyDungeon();
+        void FilledDungeon();
+        void AddPaths();
+        void AddChambers();
+        void AddCentralRoom();
+        void AddItems();
+        void AddWeapons();
+        void AddModifiedWeapons();
+        void AddPotions();
+        void AddEnemies();
+        //Dungeon Build();
     }
 }

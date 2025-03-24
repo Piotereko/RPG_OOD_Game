@@ -8,17 +8,19 @@ namespace RPG_wiedzmin_wanna_be.Game
     {
         private Dungeon dungeon;
         private Player player = new Player();
-        private IDungeonBuilder builder;
+        private DungeonBuilder builder;
         private DungeonDirector director;
 
         public GameEngine()
         {
             builder = new DungeonBuilder();
             director = new DungeonDirector(builder);
+            dungeon = builder.Build();
         }
 
         public void CreateDungeon()
         {
+            
             dungeon = director.CreateTest();
         }
         
@@ -169,10 +171,10 @@ namespace RPG_wiedzmin_wanna_be.Game
                 return;
             }
 
-            Render.printTile(dungeon.map[player.pos_x, player.pos_y]);
+            Render.Instance.printTile(dungeon.map[player.pos_x, player.pos_y]);
             player.pos_x = new_x;
             player.pos_y = new_y;
-            Render.PrintPlayer(player);
+            Render.Instance.PrintPlayer(player);
             return;
         }
 
@@ -183,17 +185,18 @@ namespace RPG_wiedzmin_wanna_be.Game
 
             Console.Clear();
             Console.CursorVisible = false;
-            Render.printWorld(dungeon);
-            Render.printItems(dungeon);
-            Render.PrintPlayer(player);
-            Render.PrintSteering();
+            Render.Instance.printWorld(dungeon);
+            Render.Instance.printItems(dungeon);
+            Render.Instance.PrintPlayer(player);
+           
 
             while (true)
             {
-                Render.PrintStats(player);
-                Render.PrintInventory(player);
-                Render.PrintTileInfo(dungeon.map[player.pos_x, player.pos_y]);
-                Render.PrintHands(player);
+                Render.Instance.PrintStats(player);
+                Render.Instance.PrintInventory(player);
+                Render.Instance.PrintTileInfo(dungeon.map[player.pos_x, player.pos_y]);
+                Render.Instance.PrintHands(player);
+                Render.Instance.PrintSteering(dungeon, player);
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
 

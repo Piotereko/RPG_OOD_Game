@@ -10,9 +10,8 @@ namespace RPG_wiedzmin_wanna_be.Game
     {
         private static Queue<string> logMessages = new Queue<string>(); //stores logs
         private const int logLimit = 5;
-        private const int logStartY = 24;
 
-        public static void PrintLog(string msg)
+        /*public static void PrintLog(string msg)
         {
             if (logMessages.Count >= logLimit)
             {
@@ -33,6 +32,21 @@ namespace RPG_wiedzmin_wanna_be.Game
                 Console.WriteLine(log);
                 index++;
             }
+        }*/
+
+        public static void PrintLog(string msg)
+        {
+            if (logMessages.Count >= logLimit)
+            {
+                logMessages.Dequeue();
+            }
+            logMessages.Enqueue(msg);
+
+            Render.Instance.PrintLogs();
+        }
+        public static Queue<string> GetLogs()
+        {
+            return logMessages;
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be.Items.Factory
 {
-    public class RandomFactory
+    public class RandomItemsFactory
     {
         private Random random = new Random();
 

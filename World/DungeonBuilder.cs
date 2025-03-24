@@ -13,13 +13,13 @@ namespace RPG_wiedzmin_wanna_be.World
     {
         private Dungeon dungeon;
 
-        private RandomFactory radnomFactory = new RandomFactory();
+        private RandomItemsFactory radnomFactory = new RandomItemsFactory();
         public DungeonBuilder(int height = 20, int width = 40) 
         {
             dungeon = new Dungeon(height, width);
         }
 
-        public IDungeonBuilder EmptyDungeon()
+        public void EmptyDungeon()
         {
             for (int i = 1; i < dungeon.height - 1; i++)
             {
@@ -28,10 +28,10 @@ namespace RPG_wiedzmin_wanna_be.World
                     dungeon.map[j, i].IsWall = false;
                 }
             }
-            return this;
+           
         }
 
-        public IDungeonBuilder FilledDungeon()
+        public void FilledDungeon()
         {
             for (int i = 0; i < dungeon.height; i++)
             {
@@ -40,9 +40,9 @@ namespace RPG_wiedzmin_wanna_be.World
                     dungeon.map[j, i].IsWall = true;
                 }
             }
-            return this;
+           
         }
-        public IDungeonBuilder AddCentralRoom()
+        public void AddCentralRoom()
         {
             int room_width = 20;
             int room_height = 10;
@@ -55,10 +55,10 @@ namespace RPG_wiedzmin_wanna_be.World
                     dungeon.map[x, y].IsWall = false;
                 }
             }
-            return this;
+           
         }
 
-        public IDungeonBuilder AddChambers()
+        public void AddChambers()
         {
             Random random = new Random();
             for(int i = 1; i < dungeon.height-1;i++)
@@ -71,15 +71,15 @@ namespace RPG_wiedzmin_wanna_be.World
                     }
                 }
             }
-            return this;
+           
         }
 
-        public IDungeonBuilder AddEnemies()
+        public void AddEnemies()
         {
             throw new NotImplementedException();
         }
 
-        public IDungeonBuilder AddItems()
+        public void AddItems()
         {
             Random random = new Random();
             int number_of_items = random.Next(10, 20);
@@ -97,10 +97,12 @@ namespace RPG_wiedzmin_wanna_be.World
                     placed++;
                 }
             }
-            return this;
+            dungeon.HasItems = true;
+            dungeon.HasWeapons = true;
+            dungeon.HasPotions = true;
         }
 
-        public IDungeonBuilder AddModifiedWeapons()
+        public void AddModifiedWeapons()
         {
             Random random = new Random();
             int number_of_items = random.Next(2, 8);
@@ -118,10 +120,12 @@ namespace RPG_wiedzmin_wanna_be.World
                     placed++;
                 }
             }
-            return this;
+            dungeon.HasWeapons = true;
+            dungeon.HasItems = true;
+           
         }
 
-        public IDungeonBuilder AddPaths()
+        public void AddPaths()
         {
             Random random = new Random();
             for (int i = 1; i < dungeon.height - 1; i++)
@@ -164,10 +168,10 @@ namespace RPG_wiedzmin_wanna_be.World
                 }
                
             }*/
-            return this;
+            
         }
 
-        public IDungeonBuilder AddPotions()
+        public void AddPotions()
         {
             Random random = new Random();
             int number_of_items = random.Next(5, 15);
@@ -185,10 +189,12 @@ namespace RPG_wiedzmin_wanna_be.World
                     placed++;
                 }
             }
-            return this;
+            dungeon.HasPotions = true;
+            dungeon.HasItems = true;
+            
         }
 
-        public IDungeonBuilder AddWeapons()
+        public void AddWeapons()
         {
             Random random = new Random();
             int number_of_items = random.Next(5, 15);
@@ -206,13 +212,18 @@ namespace RPG_wiedzmin_wanna_be.World
                     placed++;
                 }
             }
-            return this;
+
+            dungeon.HasWeapons = true;
+            dungeon.HasItems = true;
+
         }
 
         public Dungeon Build()
         {
             return dungeon;
         }
+
+     
 
         
     }

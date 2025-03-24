@@ -22,6 +22,10 @@ namespace RPG_wiedzmin_wanna_be.World
         public int height;
         public int width;
 
+        public bool HasItems;
+        public bool HasWeapons;
+        public bool HasPotions;
+
 
         public Dungeon(int _height = 20, int _width = 40)
         {

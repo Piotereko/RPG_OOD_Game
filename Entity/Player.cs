@@ -59,5 +59,10 @@ namespace RPG_wiedzmin_wanna_be.Entity
         {
             _item.RemoveEffects(this);
         }
+
+        public char EntitySing()
+        {
+           return 'P';
+        }
     }
 }
