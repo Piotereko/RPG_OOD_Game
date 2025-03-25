@@ -7,6 +7,7 @@ using System.Numerics;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.Items.Currency;
 using RPG_wiedzmin_wanna_be.Items.Weapons;
@@ -18,11 +19,12 @@ namespace RPG_wiedzmin_wanna_be.World
     {
         public Tile[,] map; // two dimension array of instances of class tile 
         public List<IItem> items; // keeping track of items on grid
+        public List<Enemy> enemies;
 
         public int height;
         public int width;
 
-        public bool HasItems;
+
         public bool HasWeapons;
         public bool HasPotions;
 

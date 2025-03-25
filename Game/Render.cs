@@ -235,9 +235,9 @@ namespace RPG_wiedzmin_wanna_be.Game
             {
                 instructionBuilder.AddEquipInstruction(dungeon.HasWeapons, dungeon.HasPotions);
             }
-            if (dungeon.HasItems || player.inventory.Count > 0)
+            if (dungeon.items.Count > 0 || player.inventory.Count > 0)
             {
-                instructionBuilder.AddPickupItemInstruction(dungeon.HasItems, player.inventory.Count > 0);
+                instructionBuilder.AddPickupItemInstruction(dungeon.items.Count > 0, player.inventory.Count > 0);
             }
 
             instructionBuilder.AddInventoryInstruction()
