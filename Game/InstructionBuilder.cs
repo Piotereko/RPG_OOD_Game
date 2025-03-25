@@ -29,14 +29,14 @@
             return this;
         }
 
-        public InstructionBuilder AddEquipInstruction(bool has_weapons, bool has_potions)
+        public InstructionBuilder AddEquipInstruction(bool has_equipable, bool has_potions)
         {
             string ins = "F -";
-            if (has_weapons)
+            if (has_equipable)
             {
-                ins += " equip weapon";
+                ins += " equip";
             }
-            if(has_potions && has_weapons)
+            if(has_potions && has_equipable)
             {
                 ins += "/";
             }

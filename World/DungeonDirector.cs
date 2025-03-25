@@ -17,8 +17,8 @@ namespace RPG_wiedzmin_wanna_be.World
 
         public void BuildBasicDungeon()
         {
-            builder.EmptyDungeon();
-            builder.FilledDungeon();
+            builder.EmptyDungeon().FilledDungeon();
+            
                             
         }
         public Dungeon CreateTest()
@@ -29,8 +29,11 @@ namespace RPG_wiedzmin_wanna_be.World
             builder.AddCentralRoom();
             builder.AddChambers();
             builder.AddItems();
+            builder.AddEnemies();
             
             return builder.Build();
+
+            
               
         }
     }

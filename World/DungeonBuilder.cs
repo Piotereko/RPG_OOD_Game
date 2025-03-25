@@ -15,7 +15,7 @@ namespace RPG_wiedzmin_wanna_be.World
             dungeon = new Dungeon(height, width);
         }
 
-        public void EmptyDungeon()
+        public DungeonBuilder EmptyDungeon()
         {
             for (int i = 1; i < dungeon.height - 1; i++)
             {
@@ -24,10 +24,11 @@ namespace RPG_wiedzmin_wanna_be.World
                     dungeon.map[j, i].IsWall = false;
                 }
             }
+            return this;
 
         }
 
-        public void FilledDungeon()
+        public DungeonBuilder FilledDungeon()
         {
             for (int i = 0; i < dungeon.height; i++)
             {
@@ -36,9 +37,10 @@ namespace RPG_wiedzmin_wanna_be.World
                     dungeon.map[j, i].IsWall = true;
                 }
             }
+            return this;
 
         }
-        public void AddCentralRoom()
+        public DungeonBuilder AddCentralRoom()
         {
             int room_width = 20;
             int room_height = 10;
@@ -51,10 +53,11 @@ namespace RPG_wiedzmin_wanna_be.World
                     dungeon.map[x, y].IsWall = false;
                 }
             }
+            return this;
 
         }
 
-        public void AddChambers()
+        public DungeonBuilder AddChambers()
         {
             Random random = new Random();
             for (int i = 1; i < dungeon.height - 1; i++)
@@ -67,10 +70,10 @@ namespace RPG_wiedzmin_wanna_be.World
                     }
                 }
             }
-
+            return this;
         }
 
-        public void AddEnemies()
+        public DungeonBuilder AddEnemies()
         {
             Random random = new Random();
             int number_of_enemies = random.Next(2, 8);
@@ -88,9 +91,10 @@ namespace RPG_wiedzmin_wanna_be.World
                     placed++;
                 }
             }
+            return this;
         }
 
-        public void AddItems()
+        public DungeonBuilder AddItems()
         {
             Random random = new Random();
             int number_of_items = random.Next(50, 70);
@@ -118,7 +122,10 @@ namespace RPG_wiedzmin_wanna_be.World
                     {
                         dungeon.HasWeapons = true;
                     }
-                    dungeon.HasPotions = true;
+                    if(item.ItemSign() == 'P')
+                    {
+                        dungeon.HasPotions = true;
+                    }
 
                     dungeon.AddItem(item);
                     placed++;
@@ -126,10 +133,10 @@ namespace RPG_wiedzmin_wanna_be.World
             }
 
 
-
+            return this;
         }
 
-        public void AddModifiedWeapons()
+        public DungeonBuilder AddModifiedWeapons()
         {
             Random random = new Random();
             int number_of_items = random.Next(2, 8);
@@ -148,9 +155,11 @@ namespace RPG_wiedzmin_wanna_be.World
                 }
             }
             dungeon.HasWeapons = true;
+
+            return this;
         }
 
-        public void AddPaths()
+        public DungeonBuilder AddPaths()
         {
             Random random = new Random();
             for (int i = 1; i < dungeon.height - 1; i++)
@@ -193,10 +202,10 @@ namespace RPG_wiedzmin_wanna_be.World
                   }
 
               }*/
-
+            return this;
         }
 
-        public void AddPotions()
+        public DungeonBuilder AddPotions()
         {
             Random random = new Random();
             int number_of_items = random.Next(5, 15);
@@ -215,9 +224,10 @@ namespace RPG_wiedzmin_wanna_be.World
                 }
             }
             dungeon.HasPotions = true;
+            return this;
         }
 
-        public void AddWeapons()
+        public DungeonBuilder AddWeapons()
         {
             Random random = new Random();
             int number_of_items = random.Next(5, 15);
@@ -237,6 +247,7 @@ namespace RPG_wiedzmin_wanna_be.World
             }
 
             dungeon.HasWeapons = true;
+            return this;
         }
 
         public Dungeon Build()

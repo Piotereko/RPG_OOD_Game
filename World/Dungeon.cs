@@ -37,6 +37,7 @@ namespace RPG_wiedzmin_wanna_be.World
             width = _width;
 
             items = new List<IItem>();
+            enemies = new List<Enemy>();
 
             for (int i = 0; i < height; i++)
             {

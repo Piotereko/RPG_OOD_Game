@@ -64,7 +64,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Factory
 
         public IItem CreateRandomCurrency(int x, int y)
         {
-            int currency_type = random.Next(0, 2);
+            int currency_type = random.Next(0, 1);
             return currency_type switch
             {
                 0 => new Coins(x, y, random.Next(1, 30)),

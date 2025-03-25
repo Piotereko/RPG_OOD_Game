@@ -197,6 +197,8 @@ namespace RPG_wiedzmin_wanna_be.Game
                 Render.Instance.PrintTileInfo(dungeon.map[player.pos_x, player.pos_y]);
                 Render.Instance.PrintHands(player);
                 Render.Instance.PrintSteering(dungeon, player);
+                Render.Instance.printEnemies(dungeon);
+                Render.Instance.printEnemiesInfo(dungeon,player);
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
 

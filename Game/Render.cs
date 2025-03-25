@@ -1,16 +1,10 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.World;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be.Game
 {
-    internal class Render
+    internal sealed class Render
     {
         private static Render instance;
 
@@ -48,7 +42,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             {
                 Console.Write("M");
             }
-            else if(tile.items.Count > 0)
+            else if (tile.items.Count > 0)
             {
                 printItem(tile.items[0]);
             }
@@ -58,7 +52,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
         }
 
-        public void printItem(IItem item) 
+        public void printItem(IItem item)
         {
             switch (item.ItemSign())
             {
@@ -71,7 +65,7 @@ namespace RPG_wiedzmin_wanna_be.Game
                     Console.Write("P");
                     break;
                 case 'W':
-                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.ForegroundColor = ConsoleColor.DarkGreen;
                     Console.Write("W");
                     break;
                 case 'R':
@@ -79,7 +73,7 @@ namespace RPG_wiedzmin_wanna_be.Game
                     Console.Write("R");
                     break;
                 case 'O':
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.ForegroundColor = ConsoleColor.DarkBlue;
                     Console.Write("W");
                     break;
             }
@@ -112,7 +106,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             foreach (IItem item in world.items)
             {
                 Console.SetCursorPosition(item.X_position, item.Y_position);
-                Tile tile = world.map[item.X_position,item.Y_position];
+                Tile tile = world.map[item.X_position, item.Y_position];
                 if (tile.items.Count > 1)
                 {
                     Console.Write("M");
@@ -128,6 +122,41 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
         }
 
+        public void printEnemies(Dungeon world)
+        {
+            foreach (Enemy enemy in world.enemies)
+            {
+                Console.SetCursorPosition(enemy.pos_x, enemy.pos_y);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write($"{enemy.EntitySing()}");
+                Console.ResetColor();
+            }
+        }
+
+        public void printEnemiesInfo(Dungeon world,Player player)
+        {
+            Console.SetCursorPosition(96, 11);
+            Console.Write("#####################");
+            Console.SetCursorPosition(96, 12);
+            Console.Write("Enemies nearby:");
+            var enemiesWithDistances = world.enemies
+            .Select(enemy => new
+            {
+                Enemy = enemy,
+                Distance = Math.Sqrt(Math.Pow(player.pos_x - enemy.pos_x, 2) + Math.Pow(player.pos_y - enemy.pos_y, 2))
+            })
+            .OrderBy(enemyWithDistance => enemyWithDistance.Distance).ToList();
+
+            ClearArea(96, 13, 20, 10);
+
+            int index = 0;
+            foreach (var enemyWithDistance in enemiesWithDistances)
+            {
+                Console.SetCursorPosition(96, 13 + index++);
+                Console.WriteLine($"{enemyWithDistance.Enemy.GetType().Name} ({enemyWithDistance.Distance:F0})");
+            }
+
+        }
 
         public void PrintStats(Player player)
         {
@@ -160,7 +189,7 @@ namespace RPG_wiedzmin_wanna_be.Game
         public void PrintInventory(Player player)
         {
             Console.SetCursorPosition(41, 11);
-            Console.Write("################################");
+            Console.Write("#####################");
 
             ClearArea(41, 12, 30, player.inventory.Count + 2);
 
@@ -189,19 +218,19 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void PrintTileInfo(Tile tile)
         {
-            Console.SetCursorPosition(80, 11);
-            Console.Write("################################");
-            Console.SetCursorPosition(80, 12);
+            Console.SetCursorPosition(68, 11);
+            Console.Write("#####################");
+            Console.SetCursorPosition(68, 12);
             Console.WriteLine("Current tile:");
 
-            ClearArea(80, 13, 35, 15);
+            ClearArea(68, 13, 30, 15);
 
             int index = 0;
             if (tile.items != null)
             {
                 foreach (IItem item in tile.items)
                 {
-                    Console.SetCursorPosition(80, 13 + index++);
+                    Console.SetCursorPosition(68, 13 + index++);
                     Console.Write(item.ToString());
                 }
             }
@@ -229,19 +258,20 @@ namespace RPG_wiedzmin_wanna_be.Game
             InstructionBuilder instructionBuilder = new InstructionBuilder();
 
             instructionBuilder.AddMovement();
-                               
-                               
+
+
             if (dungeon.HasWeapons || dungeon.HasPotions)
             {
                 instructionBuilder.AddEquipInstruction(dungeon.HasWeapons, dungeon.HasPotions);
             }
+
             if (dungeon.items.Count > 0 || player.inventory.Count > 0)
             {
                 instructionBuilder.AddPickupItemInstruction(dungeon.items.Count > 0, player.inventory.Count > 0);
             }
 
             instructionBuilder.AddInventoryInstruction()
-                               .AddSwapHandsInstruction();
+                              .AddSwapHandsInstruction();
 
             List<string> instructions = instructionBuilder.Build();
 
@@ -286,21 +316,21 @@ namespace RPG_wiedzmin_wanna_be.Game
         public void PrintPlayer(Player player)
         {
             Console.SetCursorPosition(player.pos_x, player.pos_y);
-            Console.ForegroundColor= ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.Blue;
             Console.WriteLine("@");
             Console.ResetColor();
         }
 
         public void PrintLogs()
         {
-            int logStartY = 24; 
+            int logStartY = 24;
             Console.SetCursorPosition(0, logStartY - 1);
             Console.WriteLine("Logs:");
 
-           
+
 
             ClearArea(0, logStartY, 40, 5);
-           
+
             int index = 0;
             foreach (var log in Logger.GetLogs())
             {

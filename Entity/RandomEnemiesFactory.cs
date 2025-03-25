@@ -18,7 +18,7 @@ namespace RPG_wiedzmin_wanna_be.Entity
                 0 => new Zombie(x, y),
                 1 => new Ogre(x, y),
                 2 => new Goblin(x, y),
-                _ => new Zombie(x,y),
+               
             };
         }
     }
