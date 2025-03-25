@@ -59,17 +59,56 @@ namespace RPG_wiedzmin_wanna_be.World
 
         public DungeonBuilder AddChambers()
         {
+             int chamber_size = 3;
+            
             Random random = new Random();
-            for (int i = 1; i < dungeon.height - 1; i++)
+
+            int chamberCount = 20;
+
+            int player_x = 1;
+            int player_y = 1;
+            if (Math.Abs(player_x) < chamber_size + 1 && Math.Abs(player_y) < chamber_size + 1)
             {
-                for (int j = 1; j < dungeon.width - 1; j++)
+                // Place the player's chamber
+                dungeon.chambers.Add((player_x, player_y));
+                for (int dy = 0; dy < chamber_size; dy++)
                 {
-                    if (random.Next(0, 5) == 0)
+                    for (int dx = 0; dx < chamber_size; dx++)
                     {
-                        dungeon.map[j, i].IsWall = false;
+                        dungeon.map[player_x + dx, player_y + dy].IsWall = false;
                     }
                 }
             }
+
+            while (dungeon.chambers.Count < chamberCount)
+            {
+                int x = random.Next(1, dungeon.width - chamber_size - 1);
+                int y = random.Next(1, dungeon.height - chamber_size - 1);
+
+                bool canPlace = true;
+
+                foreach (var (cx, cy) in dungeon.chambers)
+                {
+                    if (Math.Abs(x - cx) < chamber_size + 1 && Math.Abs(y - cy) < chamber_size + 1)
+                    {
+                        canPlace = false;
+                        break;
+                    }
+                }
+
+                if (canPlace)
+                {
+                    dungeon.chambers.Add((x, y));
+                    for (int dy = 0; dy < chamber_size; dy++)
+                    {
+                        for (int dx = 0; dx < chamber_size; dx++)
+                        {
+                            dungeon.map[x + dx, y + dy].IsWall = false;
+                        }
+                    }
+                }
+            }
+
             return this;
         }
 
@@ -122,7 +161,7 @@ namespace RPG_wiedzmin_wanna_be.World
                     {
                         dungeon.HasWeapons = true;
                     }
-                    if(item.ItemSign() == 'P')
+                    if (item.ItemSign() == 'P')
                     {
                         dungeon.HasPotions = true;
                     }
@@ -162,48 +201,34 @@ namespace RPG_wiedzmin_wanna_be.World
         public DungeonBuilder AddPaths()
         {
             Random random = new Random();
-            for (int i = 1; i < dungeon.height - 1; i++)
+
+          
+            for (int i = 0; i < dungeon.chambers.Count - 1; i++)
             {
-                for (int j = 1; j < dungeon.width - 1; j++)
+                var (startX, startY) = dungeon.chambers[i];
+                var (endX, endY) = dungeon.chambers[i + 1];
+                int currentX = startX + 3 / 2;
+                int currentY = startY + 3 / 2;
+                int targetX = endX + 3 / 2;
+                int targetY = endY + 3 / 2;
+                while (currentX != targetX)
                 {
-                    if (random.Next(0, 5) < 3)
-                    {
-                        dungeon.map[j, i].IsWall = false;
-                    }
+                    if (currentX < targetX) currentX++;
+                    else if (currentX > targetX) currentX--;
+                    dungeon.map[currentX, currentY].IsWall = false;
+                }
+                while (currentY != targetY)
+                {
+                    if (currentY < targetY) currentY++;
+                    else if (currentY > targetY) currentY--;
+                    dungeon.map[currentX, currentY].IsWall = false;
                 }
             }
 
-
-            /*  for (int i = 0; i < 15; i++) 
-              {
-
-                  int startX = random.Next(1, dungeon.width - 2);
-                  int startY = random.Next(1, dungeon.height - 2);
-
-
-                  int pathLength = random.Next(4, 10);
-
-
-                  bool isHorizontal = random.Next(0, 2) == 0;
-
-
-                  for (int j = 0; j < pathLength; j++)
-                  {
-                      if (isHorizontal && startX + j < dungeon.width)
-                      {
-
-                          dungeon.map[startX + j, startY].IsWall = false;
-                      }
-                      else if (!isHorizontal && startY + j < dungeon.height)
-                      {
-
-                          dungeon.map[startX, startY + j].IsWall = true;
-                      }
-                  }
-
-              }*/
             return this;
         }
+
+        
 
         public DungeonBuilder AddPotions()
         {

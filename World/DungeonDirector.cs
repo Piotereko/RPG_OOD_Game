@@ -15,26 +15,22 @@ namespace RPG_wiedzmin_wanna_be.World
             builder = _builder;
         }
 
-        public void BuildBasicDungeon()
+        public Dungeon BuildBasicDungeon()
         {
-            builder.EmptyDungeon().FilledDungeon();
-            
-                            
+            return builder.EmptyDungeon().FilledDungeon().Build();                 
         }
         public Dungeon CreateTest()
         {
-            BuildBasicDungeon();
-            
-            builder.AddPaths();
-            builder.AddCentralRoom();
-            builder.AddChambers();
-            builder.AddItems();
-            builder.AddEnemies();
-            
-            return builder.Build();
-
-            
-              
+            return builder.FilledDungeon()
+                           .AddChambers()
+                           .AddCentralRoom()
+                           .AddPaths()
+                           .AddItems()
+                           .AddEnemies()
+                           
+                           .Build();
         }
+
+       
     }
 }

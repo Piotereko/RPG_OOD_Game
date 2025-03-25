@@ -28,6 +28,7 @@ namespace RPG_wiedzmin_wanna_be.World
         public bool HasWeapons;
         public bool HasPotions;
 
+        public List<(int x, int y)> chambers;
 
         public Dungeon(int _height = 20, int _width = 40)
         {
@@ -38,6 +39,7 @@ namespace RPG_wiedzmin_wanna_be.World
 
             items = new List<IItem>();
             enemies = new List<Enemy>();
+            chambers = new List<(int, int)>();
 
             for (int i = 0; i < height; i++)
             {
