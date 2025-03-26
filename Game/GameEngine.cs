@@ -1,5 +1,6 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Items;
+using RPG_wiedzmin_wanna_be.Items.Potions;
 using RPG_wiedzmin_wanna_be.World;
 
 namespace RPG_wiedzmin_wanna_be.Game
@@ -73,6 +74,12 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
 
             IItem item = player.inventory[player.inventory_pos];
+
+            /*if(item is Potion)
+            {
+                Logger.PrintLog($"drinking {item}");
+                
+            }*/
 
             if (!item.IsEquipable)
             {

@@ -1,14 +1,18 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.World;
+using System.Text;
 
 namespace RPG_wiedzmin_wanna_be.Game
 {
     internal sealed class Render
     {
-        private static Render instance;
+        private static Render? instance;
 
-        private Render() { }
+        private Render()
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+        }
 
         public static Render Instance
         {
@@ -317,7 +321,7 @@ namespace RPG_wiedzmin_wanna_be.Game
         {
             Console.SetCursorPosition(player.pos_x, player.pos_y);
             Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("@");
+            Console.WriteLine("¶");
             Console.ResetColor();
         }
 

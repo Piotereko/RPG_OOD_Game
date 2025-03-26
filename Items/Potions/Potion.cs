@@ -13,7 +13,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
 
         public bool IsUsable => false;
 
-        public bool IsEquipable => true;
+        public bool IsEquipable => false;
 
         public bool IsTwoHanded { get => false; set { } }
 
