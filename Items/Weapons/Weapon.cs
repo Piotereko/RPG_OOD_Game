@@ -48,6 +48,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
 
         public bool EquipMe(Player player)
         {
+           
             return true;
         }
         public virtual void ApplyEffects(IEntity entity) { }

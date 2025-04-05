@@ -147,16 +147,6 @@ namespace RPG_wiedzmin_wanna_be.World
                 if (!dungeon.map[x, y].IsWall)
                 {
                     IItem item = radnomFactory.CreateRandomItem(x, y);
-                    /*switch (item.GetType())
-                    {
-                        case Weapon.GetType():
-                            dungeon.HasWeapons = true;
-                            break;
-                        case Potion.GetType():
-                            dungeon.HasPotions = true;
-                            break;
-                    }
-                    if (item.GetType().IsInstanceOfType(o: Weapon)) ;*/
                     if (item.IsEquipable)
                     {
                         dungeon.HasWeapons = true;

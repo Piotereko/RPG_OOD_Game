@@ -261,21 +261,38 @@ namespace RPG_wiedzmin_wanna_be.Game
 
             InstructionBuilder instructionBuilder = new InstructionBuilder();
 
-            instructionBuilder.AddMovement();
+            instructionBuilder.AddMovement().AddModeSwitch();
 
+            if(dungeon.items.Count > 0)
+            {
+                instructionBuilder.AddPickupItemInstruction();
+            }
+            if (player.inventory.Count > 0)
+            {
+                instructionBuilder.AddDropInstruction();
+            }
 
             if (dungeon.HasWeapons || dungeon.HasPotions)
             {
-                instructionBuilder.AddEquipInstruction(dungeon.HasWeapons, dungeon.HasPotions);
+                bool has_hand_item = false;
+                if(player.InRightHand && player.RightHand != null)
+                {
+                    has_hand_item = true;
+                }
+                else if(!player.InRightHand && player.LeftHand != null)
+                {
+                    has_hand_item = true;
+                }
+                instructionBuilder.AddEquipInstruction(dungeon.HasWeapons, dungeon.HasPotions,player.InInventory,has_hand_item);
             }
 
-            if (dungeon.items.Count > 0 || player.inventory.Count > 0)
+            /*if (dungeon.items.Count > 0 || player.inventory.Count > 0)
             {
                 instructionBuilder.AddPickupItemInstruction(dungeon.items.Count > 0, player.inventory.Count > 0);
-            }
+            }*/
 
-            instructionBuilder.AddInventoryInstruction()
-                              .AddSwapHandsInstruction();
+            instructionBuilder.AddInventoryMoveing(player.inventory.Count>0,player.InInventory)
+                              .AddExitInstruction();
 
             List<string> instructions = instructionBuilder.Build();
 
@@ -302,14 +319,14 @@ namespace RPG_wiedzmin_wanna_be.Game
 
             Console.SetCursorPosition(0, 20);
 
-            if (player.InRightHand == false)
+            if (!player.InInventory && !player.InRightHand)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
             }
             Console.Write("Left Hand: " + player.LeftHand);
             Console.ResetColor();
             Console.SetCursorPosition(0, 21);
-            if (player.InRightHand == true)
+            if (!player.InInventory && player.InRightHand)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
             }

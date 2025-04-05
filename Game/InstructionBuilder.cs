@@ -10,54 +10,73 @@
             return this;
         }
 
-        public InstructionBuilder AddPickupItemInstruction(bool map_has_items, bool player_has_items)
+        public InstructionBuilder AddPickupItemInstruction()
         {
-            string ins = "E - ";
-            if (map_has_items)
-            {
-                ins += "pickup item";
-            }
-            if (map_has_items && player_has_items)
-            {
-                ins += "/";
-            }
-            if (player_has_items)
-            {
-                ins += "drop item";
-            }
-            instructions.Add(ins);
+
+            instructions.Add("E - Pick up item");
             return this;
         }
 
-        public InstructionBuilder AddEquipInstruction(bool has_equipable, bool has_potions)
+        public InstructionBuilder AddDropInstruction()
         {
-            string ins = "F -";
-            if (has_equipable)
+            instructions.Add("Q - Drop item");
+            return this;
+        }
+        public InstructionBuilder AddInventoryMoveing(bool player_has_items, bool player_in_inventory)
+        {
+            if (player_in_inventory)
             {
-                ins += " equip";
+                if (player_has_items)
+                {
+                    instructions.Add("1 - Previous item");
+                    instructions.Add("2 - Next item");
+                }
             }
-            if(has_potions && has_equipable)
+            else
             {
-                ins += "/";
+                instructions.Add("1 - Left hand");
+                instructions.Add("2 - Right hand");
             }
-            if (has_potions)
+            return this;
+        }
+        public InstructionBuilder AddModeSwitch()
+        {
+
+            instructions.Add("R - Switch inventory/hands");
+            return this;
+        }
+        public InstructionBuilder AddEquipInstruction(bool has_equipable, bool has_potions, bool player_in_inventory, bool has_item_hand)
+        {
+
+            if (player_in_inventory)
             {
-                ins += "drink potion";
+                string ins = "F -";
+                if (has_equipable)
+                {
+                    ins += " equip";
+                }
+                if (has_potions && has_equipable)
+                {
+                    ins += "/";
+                }
+                if (has_potions)
+                {
+                    ins += "drink potion";
+                }
+                instructions.Add(ins);
             }
-            instructions.Add(ins);
+            else
+            {
+                if (has_item_hand)
+                    instructions.Add("F - Unequip item");
+            }
+
             return this;
         }
 
-        public InstructionBuilder AddInventoryInstruction()
+        public InstructionBuilder AddExitInstruction()
         {
-
-            instructions.Add("Q - inventory");
-            return this;
-        }
-
-        public InstructionBuilder AddSwapHandsInstruction()
-        {
-            instructions.Add("R - swap hands");
+            instructions.Add("ESC - Exit game");
             return this;
         }
 

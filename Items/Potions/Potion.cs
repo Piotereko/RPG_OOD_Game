@@ -43,6 +43,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
         }
         public bool EquipMe(Player player)
         {
+            player.inventory.Remove(this);
             return true;
         }
 
