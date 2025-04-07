@@ -17,9 +17,13 @@
             return this;
         }
 
-        public InstructionBuilder AddDropInstruction()
+        public InstructionBuilder AddDropInstruction(bool player_in_inventor)
         {
             instructions.Add("Q - Drop item");
+            if (player_in_inventor)
+            {
+                instructions.Add("Z - Drop all items");
+            }
             return this;
         }
         public InstructionBuilder AddInventoryMoveing(bool player_has_items, bool player_in_inventory)

@@ -164,7 +164,6 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void PrintStats(Player player)
         {
-
             ClearArea(41, 0, 20, 15);
             Console.SetCursorPosition(41, 0);
             Console.Write("################################");
@@ -194,8 +193,8 @@ namespace RPG_wiedzmin_wanna_be.Game
         {
             Console.SetCursorPosition(41, 11);
             Console.Write("#####################");
-
-            ClearArea(41, 12, 30, player.inventory.Count + 2);
+            
+            ClearArea(41, 12, 30,18);
 
             Console.SetCursorPosition(41, 12);
 
@@ -269,7 +268,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
             if (player.inventory.Count > 0)
             {
-                instructionBuilder.AddDropInstruction();
+                instructionBuilder.AddDropInstruction(player.InInventory);
             }
 
             if (dungeon.HasWeapons || dungeon.HasPotions)
@@ -286,17 +285,12 @@ namespace RPG_wiedzmin_wanna_be.Game
                 instructionBuilder.AddEquipInstruction(dungeon.HasWeapons, dungeon.HasPotions,player.InInventory,has_hand_item);
             }
 
-            /*if (dungeon.items.Count > 0 || player.inventory.Count > 0)
-            {
-                instructionBuilder.AddPickupItemInstruction(dungeon.items.Count > 0, player.inventory.Count > 0);
-            }*/
-
             instructionBuilder.AddInventoryMoveing(player.inventory.Count>0,player.InInventory)
                               .AddExitInstruction();
 
             List<string> instructions = instructionBuilder.Build();
 
-            ClearArea(80, 0, 40, 10);
+            ClearArea(80, 0, 40, 11);
 
             Console.SetCursorPosition(80, 0);
             Console.Write("##################################");

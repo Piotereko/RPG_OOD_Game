@@ -3,7 +3,7 @@ using RPG_wiedzmin_wanna_be.World;
 
 namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
 {
-    internal class MoveAction : PlayerAction
+    internal class MoveAction : BasePlayerAction
     {
         public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
         {

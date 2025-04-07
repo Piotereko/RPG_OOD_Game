@@ -14,7 +14,7 @@ namespace RPG_wiedzmin_wanna_be.Game
         private Player player = new Player();
         private DungeonBuilder builder;
         private DungeonDirector director;
-        private PlayerAction actionHandlerChain;
+        private BasePlayerAction actionHandlerChain;
 
         public GameEngine()
         {
@@ -32,51 +32,35 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         private void InitializeActionHandlers()
         {
-
             var moveHandler = new MoveAction();
-            var pickUpHandler = new ItemPickUpAction();
-            var dropHandler = new ItemDropAction();
             var inventoryNavHandler = new InventoryNavigationHandler();
             var inventorySwitchHandler = new InventorySwitchAction();
-            var equipHandler = new EquipAction();
             var exitHandler = new ExitHandler();
             var invalidInputHandler = new InvalidInputAction();
 
-
-            moveHandler
-                .SetNext(pickUpHandler)
-                .SetNext(dropHandler)
+           
+            var currentHandler = moveHandler
                 .SetNext(inventoryNavHandler)
-                .SetNext(inventorySwitchHandler)
-                .SetNext(equipHandler)
+                .SetNext(inventorySwitchHandler);
+
+          
+            if (dungeon.items.Count > 0)
+            {
+                var pickUpHandler = new ItemPickUpAction();
+                var dropHandler = new ItemDropAction();
+                var equipHandler = new EquipAction();
+
+                currentHandler = currentHandler
+                    .SetNext(pickUpHandler)
+                    .SetNext(dropHandler)
+                    .SetNext(equipHandler);
+            }
+
+            currentHandler = currentHandler
                 .SetNext(exitHandler)
                 .SetNext(invalidInputHandler);
 
             actionHandlerChain = moveHandler;
-
-            /* var moveHandler = new MoveAction();
-             var inventorySwitchHandler = new InventorySwitchAction();
-             var exitHandler = new ExitHandler();
-             var invalidInputHandler = new InvalidInputAction();
-             PlayerAction currentHandler = moveHandler;
-             if (dungeon.items.Count > 0)
-             {
-                 var pickUpHandler = new ItemPickUpAction();
-                 currentHandler.SetNext(pickUpHandler);
-             }
-             var dropHandler = new ItemDropAction();
-             currentHandler.SetNext(dropHandler);
-             var inventoryNavHandler = new InventoryNavigationHandler();
-             currentHandler.SetNext(inventoryNavHandler);
-             currentHandler.SetNext(inventorySwitchHandler);
-             if (dungeon.items.Any(item => item.IsEquipable) || player.inventory.Count > 0)
-             {
-                 var equipHandler = new EquipAction();
-                 currentHandler .SetNext(equipHandler);
-             }
-              currentHandler.SetNext(exitHandler).SetNext(invalidInputHandler);
-
-             actionHandlerChain = moveHandler;*/
         }
 
         public void Run()

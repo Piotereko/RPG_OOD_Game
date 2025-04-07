@@ -11,7 +11,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
     {
         public string Name { get; }
 
-        public bool IsUsable => false;
+        public bool IsUsable => true;
 
         public bool IsEquipable => false;
 

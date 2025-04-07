@@ -1,4 +1,5 @@
-﻿using RPG_wiedzmin_wanna_be.Items;
+﻿using RPG_wiedzmin_wanna_be.Effects;
+using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.Items.Currency;
 using RPG_wiedzmin_wanna_be.Items.Weapons;
 using System;
@@ -33,6 +34,8 @@ namespace RPG_wiedzmin_wanna_be.Entity
         public int gold_amount { get; set; }
         public int coins_amount { get; set; }
 
+        public List<IEffect> active_effects;
+
         public Player(int pos_x = 1, int pos_y = 1, int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
         {
             this.pos_x = pos_x;
@@ -47,17 +50,42 @@ namespace RPG_wiedzmin_wanna_be.Entity
             gold_amount = 0;
             coins_amount = 0;
             inventory = new List<IItem>();
+            active_effects = new List<IEffect>();
         }
 
 
 
-        public void ApplyEffect(IItem _item)
+        public void ApplyItemEffect(IItem _item)
         {
             _item.ApplyEffects(this);
         }
-        public void RemoveEffect(IItem _item)
+        public void RemoveItemEffect(IItem _item)
         {
             _item.RemoveEffects(this);
+        }
+
+        public void AddEffect(IEffect effect)
+        {
+            effect.ApplyEffect(this);
+            active_effects.Add(effect);
+        }
+
+        public void RemoveEffect(IEffect effect)
+        {
+            effect.RemoveEffect(this);
+            active_effects.Remove(effect);
+        }
+
+        public void UpdateEffects()
+        {
+            foreach(IEffect effect in active_effects)
+            {
+                effect.UpdateEffect();
+                if(effect.Duration <=0)
+                {
+                    RemoveEffect(effect);
+                }
+            }
         }
 
         public char EntitySing()
