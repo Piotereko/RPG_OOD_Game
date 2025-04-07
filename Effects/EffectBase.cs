@@ -32,6 +32,5 @@ namespace RPG_wiedzmin_wanna_be.Effects
                 Duration--;
         }
 
-
     }
 }

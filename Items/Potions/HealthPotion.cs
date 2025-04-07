@@ -9,11 +9,24 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
 {
     internal class HealthPotion : Potion
     {
-        public HealthPotion(int pos_x = 0, int pos_y = 0):base("Health Potion",pos_x,pos_y) { }
+        public HealthPotion(int pos_x = 0, int pos_y = 0):base("Health Potion",pos_x,pos_y,5) { }
 
         public override void ApplyEffects(IEntity entity)
         {
             entity.health += 20;
+        }
+
+        public override void RemoveEffects(IEntity entity)
+        {
+            entity.health -= 20;
+        }
+
+        public override void Update()
+        {
+            if(Duration > 0)
+            {
+                Duration--;
+            }
         }
     }
 }

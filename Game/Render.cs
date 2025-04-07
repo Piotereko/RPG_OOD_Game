@@ -1,5 +1,6 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Items;
+using RPG_wiedzmin_wanna_be.Items.Potions;
 using RPG_wiedzmin_wanna_be.World;
 using System.Text;
 
@@ -166,7 +167,7 @@ namespace RPG_wiedzmin_wanna_be.Game
         {
             ClearArea(41, 0, 20, 15);
             Console.SetCursorPosition(41, 0);
-            Console.Write("################################");
+            Console.Write("#####################");
             Console.SetCursorPosition(41, 1);
             Console.WriteLine("Player Statistic:");
             Console.SetCursorPosition(41, 2);
@@ -290,17 +291,17 @@ namespace RPG_wiedzmin_wanna_be.Game
 
             List<string> instructions = instructionBuilder.Build();
 
-            ClearArea(80, 0, 40, 11);
+            ClearArea(68, 0, 40, 11);
 
-            Console.SetCursorPosition(80, 0);
-            Console.Write("##################################");
-            Console.SetCursorPosition(80, 1);
+            Console.SetCursorPosition(68, 0);
+            Console.Write("#####################");
+            Console.SetCursorPosition(68, 1);
             Console.Write("Steering:");
 
             int line = 2;
             foreach (var instruction in instructions)
             {
-                Console.SetCursorPosition(80, line++);
+                Console.SetCursorPosition(68, line++);
                 Console.Write(instruction);
             }
         }
@@ -352,6 +353,25 @@ namespace RPG_wiedzmin_wanna_be.Game
                 Console.SetCursorPosition(0, logStartY + index);
                 Console.WriteLine(log);
                 index++;
+            }
+        }
+
+        public void PrintActiveEffects(List<Potion> active_potions)
+        {
+            Console.SetCursorPosition(96, 0);
+            Console.Write("#####################");
+            Console.SetCursorPosition(96, 1);
+            Console.Write("Active Effects:");
+
+
+            ClearArea(96, 2, 10, 9);
+
+            int index = 0;
+            
+            foreach(Potion potion in active_potions)
+            {
+                Console.SetCursorPosition(96, 1 + index++);
+                Console.Write(potion.ToString());
             }
         }
     }

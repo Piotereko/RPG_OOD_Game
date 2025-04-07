@@ -20,11 +20,14 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
         public int X_position { get; set; }
         public int Y_position { get; set; }
 
-        public Potion(string name, int x_position, int y_position)
+        public int Duration { get; set; }
+
+        public Potion(string name, int x_position, int y_position,int duration)
         {
             Name = name;
             X_position = x_position;
             Y_position = y_position;
+            Duration = duration;
         }
 
         public override string ToString()
@@ -49,15 +52,14 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
 
         public abstract void ApplyEffects(IEntity entity);
 
-        public void RemoveEffects(IEntity entity)
-        {
-            return;
-        }
+        public abstract void RemoveEffects(IEntity entity);
 
         public char ItemSign()
         {
            return 'P';
         }
+
+        public abstract void Update();
     }
 }
 
