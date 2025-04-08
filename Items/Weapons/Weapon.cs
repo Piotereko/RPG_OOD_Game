@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 
 namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {
@@ -48,15 +49,19 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
 
         public bool EquipMe(Player player)
         {
-           
             return true;
         }
-        public virtual void ApplyEffects(IEntity entity) { }
+        //public virtual void ApplyEffects(IEntity entity) { }
         public virtual void RemoveEffects(IEntity entity) { }
 
         public virtual char ItemSign()
         {
             return 'W';
         }
+
+       public virtual void ApplyEffects(IEntity entity, TurnManager? turn_manager = null)
+       {
+           
+       }
     }
 }

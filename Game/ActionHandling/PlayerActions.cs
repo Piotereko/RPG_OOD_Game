@@ -6,18 +6,29 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
     internal abstract class BasePlayerAction : IPlayerAction
     {
 
-        private IPlayerAction next_handler;
+        private IPlayerAction? next_handler;
         public IPlayerAction SetNext(IPlayerAction action)
-        {
-            next_handler = action;
-            return action;
-        }
-
-        public virtual void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
         {
             if (next_handler != null)
             {
-                next_handler.HandleAction(key, player, dungeon);
+                next_handler.SetNext(action);
+            }
+            else
+            {
+                next_handler = action;
+            }
+            return action;
+        }
+
+        public virtual void HandleAction(ConsoleKey key, Player player, Dungeon dungeo,TurnManager turn_manager) 
+        {
+            if (next_handler != null)
+            {
+                next_handler.HandleAction(key, player, dungeo,turn_manager);
+            }
+            else
+            {
+                Logger.PrintLog($"Invalid input. {key} is not supported!");
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
         public int Y_position { get; set; }
 
         public int Duration { get; set; }
+
+       
 
         public Potion(string name, int x_position, int y_position,int duration)
         {
@@ -47,10 +50,10 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
         public bool EquipMe(Player player)
         {
             player.inventory.Remove(this);
-            return true;
+            return false;
         }
 
-        public abstract void ApplyEffects(IEntity entity);
+        public abstract void ApplyEffects(IEntity entity, TurnManager? turn_manager = null);
 
         public abstract void RemoveEffects(IEntity entity);
 
@@ -59,7 +62,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
            return 'P';
         }
 
-        public abstract void Update();
+        
     }
 }
 

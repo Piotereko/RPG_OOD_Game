@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 
 namespace RPG_wiedzmin_wanna_be.Items
 {
@@ -21,9 +22,9 @@ namespace RPG_wiedzmin_wanna_be.Items
         void DropMe(Player player);
 
         bool EquipMe(Player player);
-        public void ApplyEffects(IEntity entity);
+        public void ApplyEffects(IEntity entity,TurnManager? turn_manager = null);
         public void RemoveEffects(IEntity entity);
-
+        
         char ItemSign();
 
 

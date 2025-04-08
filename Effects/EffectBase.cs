@@ -1,4 +1,5 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,17 +17,22 @@ namespace RPG_wiedzmin_wanna_be.Effects
         public bool IsExpired => Duration <= 0 && Duration != -1;
 
 
-        public EffectBase(string name, int duration) 
+        
+        public IEntity target_entity { get ; set ; }
+
+        public EffectBase(IEntity _entity, string name, int duration) 
         {
             Name = name;
             Duration = duration;
+            target_entity = _entity;
+
         }
 
-        public abstract void ApplyEffect(Player player);
+        public abstract void ApplyEffect(IEntity entity);
 
-        public abstract void RemoveEffect(Player player);
+        public abstract void RemoveEffect(IEntity entity);
 
-        public void UpdateEffect()
+        public virtual void UpdateEffect()
         {
             if (Duration > 0)
                 Duration--;

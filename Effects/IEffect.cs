@@ -11,8 +11,9 @@ namespace RPG_wiedzmin_wanna_be.Effects
     {
         string Name { get; set; }
         int Duration { get; set; }
-        void ApplyEffect(Player player);
-        void RemoveEffect(Player player);
+        public IEntity target_entity { get; set; }
+        void ApplyEffect(IEntity entity);
+        void RemoveEffect(IEntity entity);
         void UpdateEffect();
 
     

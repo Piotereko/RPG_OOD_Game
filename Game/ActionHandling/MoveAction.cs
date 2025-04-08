@@ -5,7 +5,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
 {
     internal class MoveAction : BasePlayerAction
     {
-        public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
+        public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon, TurnManager turn_manager)
         {
             switch (key)
             {
@@ -22,7 +22,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                     TryWalk(player.pos_x + 1, player.pos_y, player, dungeon);
                     break;
                 default:
-                    base.HandleAction(key, player, dungeon);
+                    base.HandleAction(key, player, dungeon, turn_manager);
                     break;
 
             };

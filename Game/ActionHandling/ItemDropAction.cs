@@ -6,7 +6,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
 {
     internal class ItemDropAction : BasePlayerAction
     {
-        public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
+        public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon, TurnManager turn_manager)
         {
 
             if (player.InInventory)
@@ -26,7 +26,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                 }
                 else
                 {
-                    base.HandleAction(key, player, dungeon);
+                    base.HandleAction(key, player, dungeon, turn_manager);
                 }
             }
             else
@@ -45,7 +45,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                 }
                 else
                 {
-                    base.HandleAction(key, player, dungeon);
+                    base.HandleAction(key, player, dungeon,turn_manager);
                 }
             }
 

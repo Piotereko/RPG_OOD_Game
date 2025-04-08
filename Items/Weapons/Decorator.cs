@@ -5,6 +5,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 
 namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {
@@ -45,7 +46,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         {
             
         }
-        public override void ApplyEffects(IEntity entity)
+        public override void ApplyEffects(IEntity entity, TurnManager? turn_manager = null)
         {
             entity.luck -= 5;
         }

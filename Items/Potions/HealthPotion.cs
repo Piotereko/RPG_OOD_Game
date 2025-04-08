@@ -1,4 +1,6 @@
-﻿using RPG_wiedzmin_wanna_be.Entity;
+﻿using RPG_wiedzmin_wanna_be.Effects;
+using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +11,20 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
 {
     internal class HealthPotion : Potion
     {
-        public HealthPotion(int pos_x = 0, int pos_y = 0):base("Health Potion",pos_x,pos_y,5) { }
+        public HealthPotion( int pos_x = 0, int pos_y = 0):base("Health Potion",pos_x,pos_y,5) { }
 
-        public override void ApplyEffects(IEntity entity)
+        public override void ApplyEffects(IEntity entity,TurnManager turn_manager)
         {
-            entity.health += 20;
+            var effect = new HealthEffect(entity);
+            turn_manager.AddEffect(effect);
+            effect.ApplyEffect(entity);
         }
 
         public override void RemoveEffects(IEntity entity)
         {
-            entity.health -= 20;
+            
         }
 
-        public override void Update()
-        {
-            if(Duration > 0)
-            {
-                Duration--;
-            }
-        }
+        
     }
 }

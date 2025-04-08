@@ -1,7 +1,10 @@
-﻿using RPG_wiedzmin_wanna_be.Entity;
+﻿using RPG_wiedzmin_wanna_be.Effects;
+using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,11 +14,11 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
     {
         public LuckyPotion(int pos_x, int pos_y) : base("Lucky Potion", pos_x, pos_y,5) { }
 
-        public override void ApplyEffects(IEntity entity)
+        public override void ApplyEffects(IEntity entity,TurnManager turn_manager)
         {
-            entity.luck -= 10;
-            if(entity.luck < 0)
-                entity.luck = 0;
+            var effect = new LuckEffect(entity, 10);
+            turn_manager.AddEffect(effect);
+            effect.ApplyEffect(entity);
         }
 
         public override void RemoveEffects(IEntity entity)
@@ -23,9 +26,6 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
             throw new NotImplementedException();
         }
 
-        public override void Update()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

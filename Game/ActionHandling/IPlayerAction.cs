@@ -11,6 +11,6 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
     internal interface IPlayerAction
     {
         IPlayerAction SetNext(IPlayerAction action);
-        void HandleAction(ConsoleKey key, Player player, Dungeon dungeon);
+        void HandleAction(ConsoleKey key, Player player, Dungeon dungeon,TurnManager turn_manager);
     }
 }

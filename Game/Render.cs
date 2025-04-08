@@ -1,4 +1,5 @@
-﻿using RPG_wiedzmin_wanna_be.Entity;
+﻿using RPG_wiedzmin_wanna_be.Effects;
+using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.Items.Potions;
 using RPG_wiedzmin_wanna_be.World;
@@ -356,7 +357,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             }
         }
 
-        public void PrintActiveEffects(List<Potion> active_potions)
+        public void PrintActiveEffects(TurnManager turnManager)
         {
             Console.SetCursorPosition(96, 0);
             Console.Write("#####################");
@@ -364,14 +365,14 @@ namespace RPG_wiedzmin_wanna_be.Game
             Console.Write("Active Effects:");
 
 
-            ClearArea(96, 2, 10, 9);
+            ClearArea(96, 2, 15, 9);
 
             int index = 0;
             
-            foreach(Potion potion in active_potions)
+            foreach(IEffect effect in turnManager.effects)
             {
-                Console.SetCursorPosition(96, 1 + index++);
-                Console.Write(potion.ToString());
+                Console.SetCursorPosition(96, 2 + index++);
+                Console.Write($"{effect.Name}({effect.Duration})");
             }
         }
     }

@@ -4,16 +4,16 @@ using RPG_wiedzmin_wanna_be.World;
 
 namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
 {
-    internal class EquipAction : BasePlayerAction
+    internal partial class EquipAction : BasePlayerAction
     {
-        public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
+        public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon, TurnManager turn_manager)
         {
             if (key == ConsoleKey.F)
             {
                 if (player.InInventory)
                 {
                     Logger.PrintLog("Equipping item.");
-                    TryEuipItem(player);
+                    TryEuipItem(player,turn_manager);
                 }
                 else
                 {
@@ -23,11 +23,11 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
             }
             else
             {
-                base.HandleAction(key, player, dungeon);
+                base.HandleAction(key, player, dungeon,turn_manager);
             }
         }
 
-        private void TryEuipItem(Player player)
+        private void TryEuipItem(Player player, TurnManager turn_manager)
         {
             if (player.inventory.Count == 0)
             {
@@ -95,7 +95,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
             {
                 player.inventory_pos--;
             }
-            player.ApplyItemEffect(item);
+            player.ApplyItemEffect(item,turn_manager);
             //player.inventory.Remove(item);
         }
 
@@ -132,77 +132,6 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                         player.RightHand = null;
                     player.LeftHand = null;
                 }
-            }
-        }
-
-        internal class InventoryNavigationHandler : BasePlayerAction
-        {
-            public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
-            {
-
-                switch (key)
-                {
-                    case ConsoleKey.D1:
-                        if (player.InInventory)
-                        {
-                            if (player.inventory.Count > 0)
-                            {
-                                player.inventory_pos = (player.inventory_pos - 1 + player.inventory.Count) % player.inventory.Count;
-                                Logger.PrintLog($"Selected item {player.inventory_pos + 1}/{player.inventory.Count}");
-                            }
-                        }
-                        else
-                        {
-                            player.InRightHand = false;
-                            Logger.PrintLog("Selected left hand");
-                        }
-                        break;
-                    case ConsoleKey.D2:
-                        if (player.InInventory)
-                        {
-                            if (player.inventory.Count > 0)
-                            {
-                                player.inventory_pos = (player.inventory_pos + 1) % player.inventory.Count;
-                                Logger.PrintLog($"Selected item {player.inventory_pos + 1}/{player.inventory.Count}");
-                            }
-                        }
-                        else
-                        {
-                            player.InRightHand = true;
-                            Logger.PrintLog("Selected right hand");
-                        }
-
-                        break;
-                    default:
-                        base.HandleAction(key, player, dungeon);
-                        break;
-                }
-            }
-        }
-
-        public class ExitHandler : BasePlayerAction
-        {
-            public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
-            {
-                if (key == ConsoleKey.Escape)
-                {
-                    Logger.PrintLog("Exiting game");
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    base.HandleAction(key, player, dungeon);
-                }
-
-            }
-        }
-
-        internal class InvalidInputAction : BasePlayerAction
-        {
-            public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon)
-            {
-                Logger.PrintLog("Invalid input.");
-                base.HandleAction(key, player, dungeon);
             }
         }
     }

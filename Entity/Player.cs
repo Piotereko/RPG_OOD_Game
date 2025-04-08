@@ -1,4 +1,5 @@
 ﻿using RPG_wiedzmin_wanna_be.Effects;
+using RPG_wiedzmin_wanna_be.Game;
 using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.Items.Currency;
 using RPG_wiedzmin_wanna_be.Items.Weapons;
@@ -55,9 +56,9 @@ namespace RPG_wiedzmin_wanna_be.Entity
 
 
 
-        public void ApplyItemEffect(IItem _item)
+        public void ApplyItemEffect(IItem _item,TurnManager turn_manager)
         {
-            _item.ApplyEffects(this);
+            _item.ApplyEffects(this,turn_manager);
         }
         public void RemoveItemEffect(IItem _item)
         {

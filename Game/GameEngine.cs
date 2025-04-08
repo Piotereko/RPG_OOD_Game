@@ -16,13 +16,16 @@ namespace RPG_wiedzmin_wanna_be.Game
         private DungeonDirector director;
         private BasePlayerAction actionHandlerChain;
 
-        private List<Potion> active_potions;
+        private TurnManager turnManager;
+
+        
 
         public GameEngine()
         {
             builder = new DungeonBuilder();
             director = new DungeonDirector(builder);
-            active_potions = new List<Potion>();
+            turnManager = new TurnManager();
+            
             dungeon = builder.Build();
             dungeon = director.CreateTest();
             InitializeActionHandlers();
@@ -39,7 +42,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             var inventoryNavHandler = new InventoryNavigationHandler();
             var inventorySwitchHandler = new InventorySwitchAction();
             var exitHandler = new ExitHandler();
-            var invalidInputHandler = new InvalidInputAction();
+          
 
            
             var currentHandler = moveHandler
@@ -53,20 +56,20 @@ namespace RPG_wiedzmin_wanna_be.Game
                 var dropHandler = new ItemDropAction();
                 var equipHandler = new EquipAction();
 
-                currentHandler = currentHandler
+                currentHandler
                     .SetNext(pickUpHandler)
                     .SetNext(dropHandler)
                     .SetNext(equipHandler);
             }
 
-            currentHandler = currentHandler
-                .SetNext(exitHandler)
-                .SetNext(invalidInputHandler);
+            currentHandler
+                .SetNext(exitHandler);
+                
 
             actionHandlerChain = moveHandler;
         }
 
-        public void RegisterPotionEffect(Potion potion)
+       /* public void RegisterPotionEffect(Potion potion)
         {
             active_potions.Add(potion);
         }
@@ -74,21 +77,9 @@ namespace RPG_wiedzmin_wanna_be.Game
         public void RemovePotionEffect(Potion potion)
         {
             active_potions.Remove(potion);
-        }
+        }*/
 
-        public void UpdateEffects()
-        {
-            foreach(var potion in active_potions)
-            {
-                potion.Update();
-                if(potion.Duration ==0)
-                {
-                    potion.RemoveEffects(player);
-                    active_potions.Remove(potion);
-                    Logger.PrintLog($"{potion.Name} have expired.");
-                }
-            }
-        }
+        
 
         public void Run()
         {
@@ -110,11 +101,12 @@ namespace RPG_wiedzmin_wanna_be.Game
                 Render.Instance.PrintSteering(dungeon, player);
                 Render.Instance.printEnemies(dungeon);
                 Render.Instance.printEnemiesInfo(dungeon,player);
-                Render.Instance.PrintActiveEffects(active_potions);
-                UpdateEffects();
+                Render.Instance.PrintActiveEffects(turnManager);
+                turnManager.UpdateEffects();
+               
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
-                actionHandlerChain.HandleAction(key.Key, player, dungeon);
+                actionHandlerChain.HandleAction(key.Key, player, dungeon,turnManager);
 
             }
         }
