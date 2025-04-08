@@ -1,4 +1,5 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,8 @@ namespace RPG_wiedzmin_wanna_be.Effects
         string Name { get; set; }
         int Duration { get; set; }
         public IEntity target_entity { get; set; }
-        void ApplyEffect(IEntity entity);
+        public TurnManager turnManager { get; set ; }
+    void ApplyEffect(IEntity entity);
         void RemoveEffect(IEntity entity);
         void UpdateEffect();
 

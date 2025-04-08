@@ -26,6 +26,7 @@ namespace RPG_wiedzmin_wanna_be.World
                            .AddCentralRoom()
                            .AddPaths()
                            .AddItems()
+                           .AddPotions()
                            .AddEnemies()
                            .Build();
         }

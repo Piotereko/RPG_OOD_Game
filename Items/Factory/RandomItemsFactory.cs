@@ -52,12 +52,13 @@ namespace RPG_wiedzmin_wanna_be.Items.Factory
 
         public IItem CreateRandomPotion(int x, int y)
         {
-            int potion_type = random.Next(0, 3);
+            int potion_type = random.Next(0, 4);
             return potion_type switch
             {
                 0 => new HealthPotion(x, y),
                 1 => new LuckyPotion(x, y),
                 2 => new StrengthPotion(x, y),
+                3 => new AntidothumPotion(x, y),
                 _ => new HealthPotion(x,y),
             };
         }

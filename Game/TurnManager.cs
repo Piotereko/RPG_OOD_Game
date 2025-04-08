@@ -22,19 +22,23 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void UpdateEffects()
         {
-           
-            for(int i = 0; i < effects.Count; i++)
+
+            for (int i = 0; i < effects.Count; i++)
             {
                 IEffect effect = effects[i];
 
                 effect.UpdateEffect();
 
-                if (effect.Duration == 0)
+                /*if (effect.Duration == 0)
                 {
                     effect.RemoveEffect(effect.target_entity);
-                    effects.RemoveAt(i); 
-                }
+                    effects.RemoveAt(i);
+                }*/
             }
+            /*foreach (IEffect effect in effects)
+            {
+                effect.UpdateEffect();
+            }*/
         }
     }
 }

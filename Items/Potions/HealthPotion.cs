@@ -15,7 +15,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
 
         public override void ApplyEffects(IEntity entity,TurnManager turn_manager)
         {
-            var effect = new HealthEffect(entity);
+            var effect = new HealthEffect(entity,turn_manager);
             turn_manager.AddEffect(effect);
             effect.ApplyEffect(entity);
         }

@@ -365,7 +365,7 @@ namespace RPG_wiedzmin_wanna_be.Game
             Console.Write("Active Effects:");
 
 
-            ClearArea(96, 2, 15, 9);
+            ClearArea(96, 2, 17, 9);
 
             int index = 0;
             

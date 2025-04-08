@@ -19,12 +19,14 @@ namespace RPG_wiedzmin_wanna_be.Effects
 
         
         public IEntity target_entity { get ; set ; }
+        public TurnManager turnManager { get; set ; }
 
-        public EffectBase(IEntity _entity, string name, int duration) 
+        public EffectBase(IEntity _entity, string name, int duration,TurnManager manager) 
         {
             Name = name;
             Duration = duration;
             target_entity = _entity;
+            turnManager = manager;
 
         }
 
@@ -36,6 +38,10 @@ namespace RPG_wiedzmin_wanna_be.Effects
         {
             if (Duration > 0)
                 Duration--;
+            if(Duration == 0)
+            {
+                RemoveEffect(target_entity);
+            }
         }
 
     }

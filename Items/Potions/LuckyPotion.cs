@@ -16,14 +16,14 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
 
         public override void ApplyEffects(IEntity entity,TurnManager turn_manager)
         {
-            var effect = new LuckEffect(entity, 10);
+            var effect = new LuckEffect(entity, 10,turn_manager);
             turn_manager.AddEffect(effect);
             effect.ApplyEffect(entity);
         }
 
         public override void RemoveEffects(IEntity entity)
         {
-            throw new NotImplementedException();
+           
         }
 
         

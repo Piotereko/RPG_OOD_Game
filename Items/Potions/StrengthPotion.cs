@@ -16,7 +16,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
 
         public override void ApplyEffects(IEntity entity, TurnManager turn_manager)
         {
-            var effect = new PowerEffect(entity);
+            var effect = new PowerEffect(entity, turn_manager);
             turn_manager.AddEffect(effect);
             effect.ApplyEffect(entity);
         }

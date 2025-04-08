@@ -1,4 +1,5 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
+using RPG_wiedzmin_wanna_be.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace RPG_wiedzmin_wanna_be.Effects
     internal class HealthEffect : EffectBase
     {
         
-        public HealthEffect(IEntity _entity) : base(_entity, "Health Effect", -1)
+        public HealthEffect(IEntity _entity,TurnManager manager) : base(_entity, "Health Effect", -1,manager)
         {
            
         }
@@ -25,6 +26,7 @@ namespace RPG_wiedzmin_wanna_be.Effects
             entity.health -= 10;
             if (entity.health < 0)
                 entity.health = 0;
+            turnManager.RemoveEffect(this);
         }
     }
 }

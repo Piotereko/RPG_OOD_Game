@@ -240,7 +240,7 @@ namespace RPG_wiedzmin_wanna_be.World
         public IDungeonBuilder AddPotions()
         {
             Random random = new Random();
-            int number_of_items = random.Next(5, 15);
+            int number_of_items = random.Next(10, 30);
             int placed = 0;
 
             while (placed < number_of_items)

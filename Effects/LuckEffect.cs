@@ -1,36 +1,79 @@
 ﻿using RPG_wiedzmin_wanna_be.Entity;
-using System;
-using System.Collections.Generic;
+using RPG_wiedzmin_wanna_be.Game;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RPG_wiedzmin_wanna_be.Effects
 {
     internal class LuckEffect : EffectBase
     {
-        int original_luck;
-        //int inital_duration;
-        public LuckEffect(IEntity _entity, int duration) : base(_entity, "Luck Effect", duration)
+        private static int base_luck;
+        private static bool base_captured = false;
+        private int multiplier;
+
+        public LuckEffect(IEntity entity, int duration, TurnManager manager) : base(entity, "Luck Effect", duration, manager)
         {
-            original_luck = _entity.luck;
-            //inital_duration = duration;
+            if (!base_captured)
+            {
+                base_luck = entity.luck;
+                base_captured = true;
+            }
+            multiplier = duration + 1;
+            RecalculateLuck();
         }
 
         public override void ApplyEffect(IEntity entity)
         {
-            entity.luck = original_luck * (Duration + 1);
+            RecalculateLuck();
         }
 
         public override void RemoveEffect(IEntity entity)
         {
-            entity.luck = original_luck;
+            bool last_effect = true;
+
+            foreach (var effect in turnManager.effects)
+            {
+                if (effect.GetType() == typeof(LuckEffect) && effect != this)
+                {
+                    last_effect = false;
+                }
+            }
+            if (last_effect)
+            {
+                entity.luck = base_luck;
+                base_captured = false;
+            }
+            else
+            {
+                RecalculateLuck();
+            }
+            turnManager.RemoveEffect(this);
         }
 
         public override void UpdateEffect()
         {
             base.UpdateEffect();
-            ApplyEffect(target_entity);
+            if (!IsExpired)
+            {
+                multiplier = Duration + 1;
+                RecalculateLuck();
+            }
+        }
+
+        private void RecalculateLuck()
+        {
+            int totalMultiplier = 1;
+
+            for (int i = 0; i < turnManager.effects.Count; i++)
+            {
+                IEffect effect = turnManager.effects[i];
+                if (effect.GetType() == typeof(LuckEffect))
+                {
+                    LuckEffect luckEffect = (LuckEffect)effect;
+                    totalMultiplier *= luckEffect.multiplier;
+                }
+            }
+
+            target_entity.luck = base_luck * totalMultiplier;
         }
     }
 }
