@@ -53,9 +53,9 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
             return false;
         }
 
-        public abstract void ApplyEffects(IEntity entity, TurnManager? turn_manager = null);
+        public abstract void ApplyEffects(Player entity, TurnManager? turn_manager = null);
 
-        public abstract void RemoveEffects(IEntity entity);
+        public abstract void RemoveEffects(Player entity);
 
         public char ItemSign()
         {

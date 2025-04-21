@@ -11,17 +11,17 @@ namespace RPG_wiedzmin_wanna_be.Effects
     internal class HealthEffect : EffectBase
     {
         
-        public HealthEffect(IEntity _entity,TurnManager manager) : base(_entity, "Health Effect", -1,manager)
+        public HealthEffect(Player _entity,TurnManager manager) : base(_entity, "Health Effect", -1,manager)
         {
            
         }
 
-        public override void ApplyEffect(IEntity entity)
+        public override void ApplyEffect(Player entity)
         {
             entity.health += 10;
         }
 
-        public override void RemoveEffect(IEntity entity)
+        public override void RemoveEffect(Player entity)
         {
             entity.health -= 10;
             if (entity.health < 0)

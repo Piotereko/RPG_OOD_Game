@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Game;
+using RPG_wiedzmin_wanna_be.Visitor_pattern;
 
 namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {
@@ -15,6 +16,16 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         protected Decorator(Weapon _weapon) : base(_weapon.Name,_weapon.damage,_weapon.X_position,_weapon.Y_position)
         {
             weapon = _weapon;
+        }
+
+        public override int AcceptAttack(IAttackVisitor visitor, Player player)
+        {
+            return weapon.AcceptAttack(visitor, player);
+        }
+
+        public override int AcceptDeffence(IDefenseVisitor visitor, Player player)
+        {
+            return weapon.AcceptDeffence(visitor, player);
         }
         public override char ItemSign()
         {
@@ -46,11 +57,11 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
         {
             
         }
-        public override void ApplyEffects(IEntity entity, TurnManager? turn_manager = null)
+        public override void ApplyEffects(Player entity, TurnManager? turn_manager = null)
         {
             entity.luck -= 5;
         }
-        public override void RemoveEffects(IEntity entity)
+        public override void RemoveEffects(Player entity)
         {
             entity.luck += 5;
         }

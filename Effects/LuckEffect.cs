@@ -10,7 +10,7 @@ namespace RPG_wiedzmin_wanna_be.Effects
         private static bool base_captured = false;
         private int multiplier;
 
-        public LuckEffect(IEntity entity, int duration, TurnManager manager) : base(entity, "Luck Effect", duration, manager)
+        public LuckEffect(Player entity, int duration, TurnManager manager) : base(entity, "Luck Effect", duration, manager)
         {
             if (!base_captured)
             {
@@ -21,12 +21,12 @@ namespace RPG_wiedzmin_wanna_be.Effects
             RecalculateLuck();
         }
 
-        public override void ApplyEffect(IEntity entity)
+        public override void ApplyEffect(Player entity)
         {
             RecalculateLuck();
         }
 
-        public override void RemoveEffect(IEntity entity)
+        public override void RemoveEffect(Player entity)
         {
             bool last_effect = true;
 

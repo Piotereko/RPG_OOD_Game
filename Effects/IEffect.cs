@@ -12,10 +12,10 @@ namespace RPG_wiedzmin_wanna_be.Effects
     {
         string Name { get; set; }
         int Duration { get; set; }
-        public IEntity target_entity { get; set; }
+        public Player target_entity { get; set; }
         public TurnManager turnManager { get; set ; }
-    void ApplyEffect(IEntity entity);
-        void RemoveEffect(IEntity entity);
+    void ApplyEffect(Player entity);
+        void RemoveEffect(Player entity);
         void UpdateEffect();
 
     

@@ -14,20 +14,19 @@ namespace RPG_wiedzmin_wanna_be.Entity
             Name = name;
             this.pos_x = pos_x;
             this.pos_y = pos_y;
-            this.strength = strength;
+           
             this.health = health;
-            this.agression = agression;
+            
            
         }
 
         public int pos_x { get; set; }
         public int pos_y { get; set; }
-        public int strength { get; set; }
-        public int dexterity { get; set; } = 0;
+       
         public int health { get; set; }
-        public int luck { get; set; } = 0;
-        public int agression { get; set; }
-        public int wisdom { get; set; } = 0;
+
+        public int attack_val { get; protected set; }
+        public int armour { get; protected set; }
 
         string Name { get;}
 
@@ -35,7 +34,15 @@ namespace RPG_wiedzmin_wanna_be.Entity
 
         public override string ToString()
         {
-            return $"{Name} HP: {health} STR: {strength}";
+            return $"{Name} HP: {health}";
+        }
+
+        public bool IsAlive => health > 0;
+
+        public void TakeDamage(int damage)
+        {
+            int actualDamage = Math.Max(0, damage - armour);
+            health -= actualDamage;
         }
     }
 }

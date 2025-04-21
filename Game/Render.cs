@@ -3,6 +3,7 @@ using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.Items.Potions;
 using RPG_wiedzmin_wanna_be.World;
+using System;
 using System.Text;
 
 namespace RPG_wiedzmin_wanna_be.Game
@@ -130,8 +131,17 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void printEnemies(Dungeon world)
         {
-            foreach (Enemy enemy in world.enemies)
+            /*foreach (Enemy enemy in world.enemies)
             {
+                Console.SetCursorPosition(enemy.pos_x, enemy.pos_y);
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write($"{enemy.EntitySing()}");
+                Console.ResetColor();
+            }*/
+
+            for(int i = 0; i < world.enemies.Count; i++)
+            {
+                Enemy enemy = world.enemies[i];
                 Console.SetCursorPosition(enemy.pos_x, enemy.pos_y);
                 Console.ForegroundColor = ConsoleColor.DarkRed;
                 Console.Write($"{enemy.EntitySing()}");
@@ -141,9 +151,9 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void printEnemiesInfo(Dungeon world,Player player)
         {
-            Console.SetCursorPosition(96, 11);
+            Console.SetCursorPosition(96, 13);
             Console.Write("#####################");
-            Console.SetCursorPosition(96, 12);
+            Console.SetCursorPosition(96, 14);
             Console.Write("Enemies nearby:");
             var enemiesWithDistances = world.enemies
             .Select(enemy => new
@@ -153,12 +163,12 @@ namespace RPG_wiedzmin_wanna_be.Game
             })
             .OrderBy(enemyWithDistance => enemyWithDistance.Distance).ToList();
 
-            ClearArea(96, 13, 20, 10);
+            ClearArea(96, 15, 20, 10);
 
             int index = 0;
             foreach (var enemyWithDistance in enemiesWithDistances)
             {
-                Console.SetCursorPosition(96, 13 + index++);
+                Console.SetCursorPosition(96, 15 + index++);
                 Console.WriteLine($"{enemyWithDistance.Enemy.GetType().Name} ({enemyWithDistance.Distance:F0})");
             }
 
@@ -172,33 +182,47 @@ namespace RPG_wiedzmin_wanna_be.Game
             Console.SetCursorPosition(41, 1);
             Console.WriteLine("Player Statistic:");
             Console.SetCursorPosition(41, 2);
-            Console.WriteLine("Health:    " + player.health);
+            Console.WriteLine("Health:     " + player.health);
             Console.SetCursorPosition(41, 3);
-            Console.WriteLine("Strength:  " + player.strength);
+            Console.WriteLine("Strength:   " + player.strength);
             Console.SetCursorPosition(41, 4);
-            Console.WriteLine("Dexterity: " + player.dexterity);
+            Console.WriteLine("Dexterity:  " + player.dexterity);
             Console.SetCursorPosition(41, 5);
-            Console.WriteLine("Luck:      " + player.luck);
+            Console.WriteLine("Luck:       " + player.luck);
             Console.SetCursorPosition(41, 6);
-            Console.WriteLine("Agression: " + player.agression);
+            Console.WriteLine("Agression:  " + player.agression);
             Console.SetCursorPosition(41, 7);
-            Console.WriteLine("Wisdom:    " + player.wisdom);
+            Console.WriteLine("Wisdom:     " + player.wisdom);
             Console.SetCursorPosition(41, 8);
-            Console.WriteLine("Coins:     " + player.coins_amount);
+            Console.WriteLine("Coins:      " + player.coins_amount);
             Console.SetCursorPosition(41, 9);
-            Console.WriteLine("Gold:      " + player.gold_amount);
+            Console.WriteLine("Gold:       " + player.gold_amount);
+            Console.SetCursorPosition(41, 10);
+            Console.Write("Attack mode:");
+            switch(player.attack_mode)
+            {
+                case (0):
+                    Console.WriteLine("Normal attack");
+                    break;
+                case (1):
+                    Console.WriteLine("Stealth attack");
+                    break;
+                case (2):
+                    Console.WriteLine("Magic attack");
+                    break;
+            }
         }
 
 
 
         public void PrintInventory(Player player)
         {
-            Console.SetCursorPosition(41, 11);
+            Console.SetCursorPosition(41, 13);
             Console.Write("#####################");
             
-            ClearArea(41, 12, 30,18);
+            ClearArea(41, 14, 30,16);
 
-            Console.SetCursorPosition(41, 12);
+            Console.SetCursorPosition(41, 14);
 
             if (player.InInventory == true)
             {
@@ -214,7 +238,7 @@ namespace RPG_wiedzmin_wanna_be.Game
                 {
                     Console.ForegroundColor = ConsoleColor.Green;
                 }
-                Console.SetCursorPosition(41, 13 + index++);
+                Console.SetCursorPosition(41, 15 + index++);
                 Console.Write(item);
                 Console.ResetColor();
             }
@@ -223,19 +247,19 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void PrintTileInfo(Tile tile)
         {
-            Console.SetCursorPosition(68, 11);
+            Console.SetCursorPosition(68, 13);
             Console.Write("#####################");
-            Console.SetCursorPosition(68, 12);
+            Console.SetCursorPosition(68, 14);
             Console.WriteLine("Current tile:");
 
-            ClearArea(68, 13, 30, 15);
+            ClearArea(68, 15, 30, 15);
 
             int index = 0;
             if (tile.items != null)
             {
                 foreach (IItem item in tile.items)
                 {
-                    Console.SetCursorPosition(68, 13 + index++);
+                    Console.SetCursorPosition(68, 15 + index++);
                     Console.Write(item.ToString());
                 }
             }
@@ -245,21 +269,6 @@ namespace RPG_wiedzmin_wanna_be.Game
 
         public void PrintSteering(Dungeon dungeon, Player player)
         {
-            /*Console.SetCursorPosition(80, 0);
-            Console.Write("##################################");
-            Console.SetCursorPosition(80, 1);
-            Console.Write("Steering:");
-            Console.SetCursorPosition(80, 2);
-            Console.Write("W,A,S,D - movement");
-            Console.SetCursorPosition(80, 3);
-            Console.Write("E - pickup item");
-            Console.SetCursorPosition(80, 4);
-            Console.Write("F - equip");
-            Console.SetCursorPosition(80, 5);
-            Console.Write("Q - inventory");
-            Console.SetCursorPosition(80, 6);
-            Console.Write("R - swap hands");*/
-
             InstructionBuilder instructionBuilder = new InstructionBuilder();
 
             instructionBuilder.AddMovement().AddModeSwitch();
@@ -287,7 +296,15 @@ namespace RPG_wiedzmin_wanna_be.Game
                 instructionBuilder.AddEquipInstruction(dungeon.HasWeapons, dungeon.HasPotions,player.InInventory,has_hand_item);
             }
 
+            bool enemiesNearby = dungeon.enemies.Any(e => Math.Abs(e.pos_x - player.pos_x) <= 1 && Math.Abs(e.pos_y - player.pos_y) <= 1);
+
+            if (enemiesNearby)
+            {
+                instructionBuilder.AddAttackInstruction();
+            }
+
             instructionBuilder.AddInventoryMoveing(player.inventory.Count>0,player.InInventory)
+                               .AddAttackMode()
                               .AddExitInstruction();
 
             List<string> instructions = instructionBuilder.Build();

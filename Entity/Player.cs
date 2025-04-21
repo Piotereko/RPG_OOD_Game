@@ -31,6 +31,8 @@ namespace RPG_wiedzmin_wanna_be.Entity
         public int inventory_pos = 0;
         public bool InRightHand = true;
 
+        public int attack_mode = 0;
+
 
         public int gold_amount { get; set; }
         public int coins_amount { get; set; }

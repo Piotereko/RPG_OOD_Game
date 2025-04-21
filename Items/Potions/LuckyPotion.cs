@@ -14,14 +14,14 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
     {
         public LuckyPotion(int pos_x, int pos_y) : base("Lucky Potion", pos_x, pos_y,5) { }
 
-        public override void ApplyEffects(IEntity entity,TurnManager turn_manager)
+        public override void ApplyEffects(Player entity,TurnManager turn_manager)
         {
             var effect = new LuckEffect(entity, 10,turn_manager);
             turn_manager.AddEffect(effect);
             effect.ApplyEffect(entity);
         }
 
-        public override void RemoveEffects(IEntity entity)
+        public override void RemoveEffects(Player entity)
         {
            
         }

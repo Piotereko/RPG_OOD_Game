@@ -4,6 +4,7 @@ using RPG_wiedzmin_wanna_be.Items;
 using RPG_wiedzmin_wanna_be.Items.Potions;
 using RPG_wiedzmin_wanna_be.Items.Weapons;
 using RPG_wiedzmin_wanna_be.World;
+using static RPG_wiedzmin_wanna_be.Game.ActionHandling.AttackModeHandler;
 using static RPG_wiedzmin_wanna_be.Game.ActionHandling.EquipAction;
 
 namespace RPG_wiedzmin_wanna_be.Game
@@ -42,12 +43,16 @@ namespace RPG_wiedzmin_wanna_be.Game
             var inventoryNavHandler = new InventoryNavigationHandler();
             var inventorySwitchHandler = new InventorySwitchAction();
             var exitHandler = new ExitHandler();
-          
+            var attackmode = new AttackModeHandler();
+            var attackHandler = new AttackAction();
 
-           
+
+
             var currentHandler = moveHandler
                 .SetNext(inventoryNavHandler)
-                .SetNext(inventorySwitchHandler);
+                .SetNext(inventorySwitchHandler)
+                .SetNext(attackHandler)
+                .SetNext(attackmode);
 
           
             if (dungeon.items.Count > 0)

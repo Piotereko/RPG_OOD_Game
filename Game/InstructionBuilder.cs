@@ -43,6 +43,18 @@
             }
             return this;
         }
+
+        public InstructionBuilder AddAttackMode()
+        {
+            instructions.Add("Z - change attack mode");
+            return this;
+        }
+
+        public InstructionBuilder AddAttackInstruction()
+        {
+            instructions.Add("X - Attack nearby enemy");
+            return this;
+        }
         public InstructionBuilder AddModeSwitch()
         {
 

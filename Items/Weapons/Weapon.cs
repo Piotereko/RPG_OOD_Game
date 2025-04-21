@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using RPG_wiedzmin_wanna_be.Entity;
 using RPG_wiedzmin_wanna_be.Game;
+using RPG_wiedzmin_wanna_be.Visitor_pattern;
 
 namespace RPG_wiedzmin_wanna_be.Items.Weapons
 {
@@ -32,6 +33,10 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
             X_position = pos_x;
             Y_position = pos_y;
         }
+
+        public abstract int AcceptAttack(IAttackVisitor visitor, Player player);
+        public abstract int AcceptDeffence(IDefenseVisitor visitor, Player player);
+
         public override string ToString()
         {
             return $"{Name} ({Damage})";
@@ -52,14 +57,14 @@ namespace RPG_wiedzmin_wanna_be.Items.Weapons
             return true;
         }
         //public virtual void ApplyEffects(IEntity entity) { }
-        public virtual void RemoveEffects(IEntity entity) { }
+        public virtual void RemoveEffects(Player entity) { }
 
         public virtual char ItemSign()
         {
             return 'W';
         }
 
-       public virtual void ApplyEffects(IEntity entity, TurnManager? turn_manager = null)
+       public virtual void ApplyEffects(Player entity, TurnManager? turn_manager = null)
        {
            
        }

@@ -22,8 +22,8 @@ namespace RPG_wiedzmin_wanna_be.Items
         void DropMe(Player player);
 
         bool EquipMe(Player player);
-        public void ApplyEffects(IEntity entity,TurnManager? turn_manager = null);
-        public void RemoveEffects(IEntity entity);
+        public void ApplyEffects(Player entity,TurnManager? turn_manager = null);
+        public void RemoveEffects(Player entity);
         
         char ItemSign();
 

@@ -44,12 +44,12 @@ namespace RPG_wiedzmin_wanna_be.Items.Currency
             return true;
         }
 
-        public void ApplyEffects(IEntity entity, TurnManager? turn_manager = null)
+        public void ApplyEffects(Player entity, TurnManager? turn_manager = null)
         {
             return;
         }
 
-        public void RemoveEffects(IEntity entity)
+        public void RemoveEffects(Player entity)
         {
             return;
         }

@@ -15,7 +15,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
         {
         }
 
-        public override void ApplyEffects(IEntity entity, TurnManager? turn_manager = null)
+        public override void ApplyEffects(Player entity, TurnManager? turn_manager = null)
         {
             if (turn_manager == null) return;
             var activeEffects = new List<IEffect>(turn_manager.effects);
@@ -29,7 +29,7 @@ namespace RPG_wiedzmin_wanna_be.Items.Potions
             Logger.PrintLog("All active effects have been removed!");
         }
 
-        public override void RemoveEffects(IEntity entity)
+        public override void RemoveEffects(Player entity)
         {
            
         }
