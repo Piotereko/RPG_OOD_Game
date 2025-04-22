@@ -46,7 +46,7 @@
 
         public InstructionBuilder AddAttackMode()
         {
-            instructions.Add("Z - change attack mode");
+            instructions.Add("C - change attack mode");
             return this;
         }
 

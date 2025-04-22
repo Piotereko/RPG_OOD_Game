@@ -7,7 +7,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
     {
         public override void HandleAction(ConsoleKey key, Player player, Dungeon dungeon, TurnManager turn_manager)
         {
-            if (key == ConsoleKey.Z)
+            if (key == ConsoleKey.C)
             {
                 Logger.PrintLog("Attack mode changed");
                 player.attack_mode += 1;

@@ -76,36 +76,50 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
 
         private bool DropEquippedItem(Player player, Dungeon dungeon)
         {
-            IItem? item;
-            if (player.InRightHand)
+            IItem? item = null;
+
+            
+            if (player.RightHandChoosed && player.RightHand != null)
             {
                 item = player.RightHand;
             }
-            else
+            else if (player.LeftHandChoosed && player.LeftHand != null)
             {
                 item = player.LeftHand;
             }
+
             if (item == null) return false;
 
+            
             Tile tile = dungeon.map[player.pos_x, player.pos_y];
             item.X_position = player.pos_x;
             item.Y_position = player.pos_y;
             item.DropMe(player);
 
+            
             tile.items.Add(item);
 
-            if (player.InRightHand)
+            
+            if (player.RightHandChoosed && player.RightHand != null)
             {
                 player.RightHand = null;
-                if (item.IsTwoHanded) player.LeftHand = null;
+                if (item.IsTwoHanded)
+                {
+                    player.LeftHand = null;
+                }
             }
-            else
+            else if (player.LeftHandChoosed && player.LeftHand != null)
             {
                 player.LeftHand = null;
-                if (item.IsTwoHanded) player.RightHand = null;
+                if (item.IsTwoHanded)
+                {
+                    player.RightHand = null;
+                }
             }
 
+          
             player.RemoveItemEffect(item);
+
             return true;
         }
 

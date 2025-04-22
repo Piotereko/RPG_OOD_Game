@@ -31,6 +31,9 @@ namespace RPG_wiedzmin_wanna_be.Entity
         public int inventory_pos = 0;
         public bool InRightHand = true;
 
+        public bool RightHandChoosed = false;
+        public bool LeftHandChoosed = false;
+
         public int attack_mode = 0;
 
 

@@ -143,9 +143,16 @@ namespace RPG_wiedzmin_wanna_be.Game
             {
                 Enemy enemy = world.enemies[i];
                 Console.SetCursorPosition(enemy.pos_x, enemy.pos_y);
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.Write($"{enemy.EntitySing()}");
-                Console.ResetColor();
+                if (enemy.IsAlive)
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write($"{enemy.EntitySing()}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.Write(' ');
+                }
             }
         }
 
@@ -168,15 +175,18 @@ namespace RPG_wiedzmin_wanna_be.Game
             int index = 0;
             foreach (var enemyWithDistance in enemiesWithDistances)
             {
-                Console.SetCursorPosition(96, 15 + index++);
-                Console.WriteLine($"{enemyWithDistance.Enemy.GetType().Name} ({enemyWithDistance.Distance:F0})");
+                if (enemyWithDistance.Enemy.IsAlive)
+                {
+                    Console.SetCursorPosition(96, 15 + index++);
+                    Console.WriteLine($"{enemyWithDistance.Enemy.GetType().Name} ({enemyWithDistance.Distance:F0}) HP: {enemyWithDistance.Enemy.health}");
+                }
             }
 
         }
 
         public void PrintStats(Player player)
         {
-            ClearArea(41, 0, 20, 15);
+            ClearArea(41, 0, 26, 15);
             Console.SetCursorPosition(41, 0);
             Console.Write("#####################");
             Console.SetCursorPosition(41, 1);
@@ -309,7 +319,7 @@ namespace RPG_wiedzmin_wanna_be.Game
 
             List<string> instructions = instructionBuilder.Build();
 
-            ClearArea(68, 0, 40, 11);
+            ClearArea(68, 0, 40, 12);
 
             Console.SetCursorPosition(68, 0);
             Console.Write("#####################");
@@ -332,16 +342,24 @@ namespace RPG_wiedzmin_wanna_be.Game
 
             Console.SetCursorPosition(0, 20);
 
-            if (!player.InInventory && !player.InRightHand)
+            if (!player.InInventory && player.LeftHandChoosed)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
+            }
+            if(player.LeftHandChoosed)
+            {
+                Console.Write("->");
             }
             Console.Write("Left Hand: " + player.LeftHand);
             Console.ResetColor();
             Console.SetCursorPosition(0, 21);
-            if (!player.InInventory && player.InRightHand)
+            if (!player.InInventory && player.RightHandChoosed)
             {
                 Console.ForegroundColor = ConsoleColor.Green;
+            }
+            if (player.RightHandChoosed)
+            {
+                Console.Write("->");
             }
             Console.Write("Right Hand: " + player.RightHand);
             Console.ResetColor();

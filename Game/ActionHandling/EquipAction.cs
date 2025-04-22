@@ -13,7 +13,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                 if (player.InInventory)
                 {
                     Logger.PrintLog("Equipping item.");
-                    TryEuipItem(player,turn_manager);
+                    TryEuipItem(player, turn_manager);
                 }
                 else
                 {
@@ -23,7 +23,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
             }
             else
             {
-                base.HandleAction(key, player, dungeon,turn_manager);
+                base.HandleAction(key, player, dungeon, turn_manager);
             }
         }
 
@@ -52,7 +52,7 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                 {
                     if (player.RightHand != null || player.LeftHand != null)
                     {
-                        player.inventory.Add(item);
+                        //player.inventory.Add(item);
                         Logger.PrintLog("Cannot equip: Hands are occupied. ");
                         return;
                     }
@@ -62,7 +62,40 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                 }
                 else
                 {
-                    if (player.InRightHand)
+                    /* if (player.InRightHand)
+                     {
+                         if (player.RightHand == null)
+                             player.RightHand = item;
+                         else
+                         {
+                             Logger.PrintLog("Right hand occupied");
+                             return;
+                         }
+
+                     }
+                     else
+                     {
+                         if (player.LeftHand == null)
+                             player.LeftHand = item;
+                         else
+                         {
+                             Logger.PrintLog("left hand occupied");
+                             return;
+                         }
+                     }*/
+                    if (player.RightHandChoosed && player.LeftHandChoosed)
+                    {
+                        if (player.RightHand == null)
+                            player.RightHand = item;
+                        else if(player.LeftHand == null)
+                            player.LeftHand = item;
+                        else
+                        {
+                            Logger.PrintLog("Right hand occupied");
+                            return;
+                        }
+                    }
+                    else if (player.RightHandChoosed)
                     {
                         if (player.RightHand == null)
                             player.RightHand = item;
@@ -71,9 +104,8 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                             Logger.PrintLog("Right hand occupied");
                             return;
                         }
-
                     }
-                    else
+                    else if (player.LeftHandChoosed) 
                     {
                         if (player.LeftHand == null)
                             player.LeftHand = item;
@@ -83,6 +115,13 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                             return;
                         }
                     }
+                    else
+                    {
+                        Logger.PrintLog("Please select one hand!");
+                        return;
+                    }
+
+
                 }
                 Logger.PrintLog($"{item} equipped");
                 player.inventory.Remove(item);
@@ -95,43 +134,43 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
             {
                 player.inventory_pos--;
             }
-            player.ApplyItemEffect(item,turn_manager);
+            player.ApplyItemEffect(item, turn_manager);
             //player.inventory.Remove(item);
         }
 
         private void Unequip(Player player)
         {
-            if (player.InRightHand == true)
+            if (player.RightHandChoosed && player.RightHand != null)
             {
-                if (player.RightHand == null)
+                player.inventory.Add(player.RightHand);
+                player.RemoveItemEffect(player.RightHand);
+
+                
+                if (player.RightHand.IsTwoHanded)
                 {
-                    Logger.PrintLog("right hand is empty");
-                    return;
+                    player.LeftHand = null;
                 }
-                else
+
+                player.RightHand = null;
+                Logger.PrintLog("Right hand unequipped.");
+            }
+            
+            else if (player.LeftHandChoosed && player.LeftHand != null)
+            {
+                player.RemoveItemEffect(player.LeftHand);
+                player.inventory.Add(player.LeftHand);
+
+                if (player.LeftHand.IsTwoHanded)
                 {
-                    player.inventory.Add(player.RightHand);
-                    player.RemoveItemEffect(player.RightHand);
-                    if (player.RightHand.IsTwoHanded == true)
-                        player.LeftHand = null;
                     player.RightHand = null;
                 }
+
+                player.LeftHand = null;
+                Logger.PrintLog("Left hand unequipped.");
             }
             else
             {
-                if (player.LeftHand == null)
-                {
-                    Logger.PrintLog("left hand is empty");
-                    return;
-                }
-                else
-                {
-                    player.RemoveItemEffect(player.LeftHand);
-                    player.inventory.Add(player.LeftHand);
-                    if (player.LeftHand.IsTwoHanded == true)
-                        player.RightHand = null;
-                    player.LeftHand = null;
-                }
+                Logger.PrintLog("No item chosen to unequip.");
             }
         }
     }

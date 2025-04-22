@@ -22,8 +22,16 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                     }
                     else
                     {
-                        player.InRightHand = false;
-                        Logger.PrintLog("Selected left hand");
+                        if (player.LeftHandChoosed)
+                        {
+                            player.LeftHandChoosed = false;
+                            Logger.PrintLog("Unselected left hand");
+                        }
+                        else
+                        {
+                            player.LeftHandChoosed = true;
+                            Logger.PrintLog("Selected left hand");
+                        }
                     }
                     break;
                 case ConsoleKey.D2:
@@ -36,9 +44,17 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                         }
                     }
                     else
-                    {
-                        player.InRightHand = true;
-                        Logger.PrintLog("Selected right hand");
+                    {   
+                        if (player.RightHandChoosed)
+                        {
+                            player.RightHandChoosed = false;
+                            Logger.PrintLog("Unselected right hand");
+                        }
+                        else
+                        {
+                            player.RightHandChoosed = true;
+                            Logger.PrintLog("Selected right hand");
+                        }
                     }
 
                     break;
