@@ -17,35 +17,30 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                     return;
                 }
 
-                // Find adjacent enemies
-                var adjacentEnemies = dungeon.enemies
-                    .Where(e => IsAdjacent(player.pos_x, player.pos_y, e.pos_x, e.pos_y))
+                
+                var nerbyenemies = dungeon.enemies
+                    .Where(e => (Math.Abs(e.pos_x - player.pos_x) <= 1 && Math.Abs(e.pos_y - player.pos_y) <= 1))
                     .ToList();
 
-                if (!adjacentEnemies.Any())
+                if (!nerbyenemies.Any())
                 {
                     Logger.PrintLog("No enemies nearby to attack!");
                     return;
                 }
 
-                // Attack first adjacent enemy
-                var enemy = adjacentEnemies.First();
-                FightEnemy(player,enemy);
-
                 
-                dungeon.enemies.RemoveAll(e => e.health <=0);
+                var enemy = nerbyenemies.First();
+                FightEnemy(player,enemy);
+                
+                dungeon.enemies.RemoveAll(e => !e.IsAlive);
             }
 
-            private bool IsAdjacent(int x1, int y1, int x2, int y2)
-            {
-                return Math.Abs(x1 - x2) <= 1 && Math.Abs(y1 - y2) <= 1;
-            }
 
             private void FightEnemy(Player player,Enemy enemy)
             {
                 if (enemy == null || !enemy.IsAlive) return;
 
-                // Create appropriate visitors based on attack mode
+                
                 IAttackVisitor attackVisitor = player.attack_mode switch
                 {
                     0 => new NormalAttackVisitor(),
@@ -76,7 +71,8 @@ namespace RPG_wiedzmin_wanna_be.Game.ActionHandling
                 
                 //with {GetAttackModeName(player)}
                 enemy.TakeDamage(totalDamage);
-                Logger.PrintLog($"You attacked {enemy.GetType().Name}  for {totalDamage} damage!");
+
+                Logger.PrintLog($"You attacked {enemy.GetType().Name} for {totalDamage} damage!");
 
                 if (enemy.health <= 0)
                 {
