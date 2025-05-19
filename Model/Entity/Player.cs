@@ -1,0 +1,81 @@
+﻿using RPG_wiedzmin_wanna_be.Model.Items.Currency;
+using RPG_wiedzmin_wanna_be.Model.Items.Weapons;
+using RPG_wiedzmin_wanna_be.Model.Effects;
+using RPG_wiedzmin_wanna_be.Model.Items;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using RPG_wiedzmin_wanna_be.Model.Game;
+
+namespace RPG_wiedzmin_wanna_be.Model.Entity
+{
+    public class Player : IEntity
+    {
+        public int pos_x { get; set; }
+        public int pos_y { get; set; }
+        public int strength { get; set; }
+        public int dexterity { get; set; }
+        public int health { get; set; }
+        public int luck { get; set; }
+        public int agression { get; set; }
+        public int wisdom { get; set; }
+
+        public List<IItem> inventory;
+
+        public IItem? RightHand;
+        public IItem? LeftHand;
+
+        public bool InInventory = false;
+        public int inventory_pos = 0;
+        public bool InRightHand = true;
+
+        public bool RightHandChoosed = false;
+        public bool LeftHandChoosed = false;
+
+        public int attack_mode = 0;
+
+
+        public int gold_amount { get; set; }
+        public int coins_amount { get; set; }
+
+        public List<IEffect> active_effects;
+
+        public Player(int pos_x = 1, int pos_y = 1, int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
+        {
+            this.pos_x = pos_x;
+            this.pos_y = pos_y;
+            this.strength = strength;
+            this.dexterity = dexterity;
+            this.health = health;
+            this.luck = luck;
+            this.agression = agression;
+            this.wisdom = wisdom;
+
+            gold_amount = 0;
+            coins_amount = 0;
+            inventory = new List<IItem>();
+            active_effects = new List<IEffect>();
+        }
+
+
+
+        public void ApplyItemEffect(IItem _item, TurnManager turn_manager)
+        {
+            _item.ApplyEffects(this, turn_manager);
+        }
+        public void RemoveItemEffect(IItem _item)
+        {
+            _item.RemoveEffects(this);
+        }
+
+
+
+
+        public char EntitySing()
+        {
+            return 'P';
+        }
+    }
+}

@@ -1,4 +1,4 @@
-﻿using RPG_wiedzmin_wanna_be.Game;
+﻿using RPG_wiedzmin_wanna_be.Model.Game;
 
 namespace RPG_wiedzmin_wanna_be
 {
