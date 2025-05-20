@@ -10,7 +10,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Game.ActionHandling
         {
             if (key == ConsoleKey.E)
             {
-                var tile = dungeon.map[player.pos_x, player.pos_y];
+                var tile = dungeon.map[player.pos_x][player.pos_y];
                 if (tile.items.Count > 0)
                 {
                     tile.items[0].PickMe(player);

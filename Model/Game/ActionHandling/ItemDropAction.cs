@@ -57,7 +57,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Game.ActionHandling
             {
                 if (player.inventory.Count > 0)
                 {
-                    Tile tile = dungeon.map[player.pos_x, player.pos_y];
+                    Tile tile = dungeon.map[player.pos_x][player.pos_y];
                     IItem item = player.inventory[player.inventory_pos]; //item to drop
 
                     item.X_position = player.pos_x; item.Y_position = player.pos_y;
@@ -92,7 +92,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Game.ActionHandling
             if (item == null) return false;
 
 
-            Tile tile = dungeon.map[player.pos_x, player.pos_y];
+            Tile tile = dungeon.map[player.pos_x][player.pos_y];
             item.X_position = player.pos_x;
             item.Y_position = player.pos_y;
             item.DropMe(player);

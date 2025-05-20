@@ -32,9 +32,9 @@ namespace RPG_wiedzmin_wanna_be.Model.Game.ActionHandling
 
         private void TryWalk(int new_x, int new_y, Player player, Dungeon dungeon)
         {
-            if (!dungeon.map[new_x, new_y].IsWall)
+            if (!dungeon.map[new_x][new_y].IsWall)
             {
-                Render.Instance.printTile(dungeon.map[player.pos_x, player.pos_y]);
+                Render.Instance.printTile(dungeon.map[player.pos_x][player.pos_y]);
                 player.pos_x = new_x;
                 player.pos_y = new_y;
                 Render.Instance.PrintPlayer(player);

@@ -14,7 +14,7 @@ namespace RPG_wiedzmin_wanna_be.View
             Render.Instance.PrintStats(player);
             Render.Instance.PrintInventory(player);
             Render.Instance.PrintHands(player);
-            Render.Instance.PrintTileInfo(dungeon.map[player.pos_x, player.pos_y]);
+            Render.Instance.PrintTileInfo(dungeon.map[player.pos_x][    player.pos_y]);
             Render.Instance.PrintSteering(dungeon, player);
             Render.Instance.printEnemies(dungeon);
             Render.Instance.printEnemiesInfo(dungeon, player);
@@ -29,12 +29,56 @@ namespace RPG_wiedzmin_wanna_be.View
             Render.Instance.PrintStats(player);
             Render.Instance.PrintInventory(player);
             Render.Instance.PrintHands(player);
-            Render.Instance.PrintTileInfo(dungeon.map[player.pos_x, player.pos_y]);
+            Render.Instance.PrintTileInfo(dungeon.map[player.pos_x][player.pos_y]);
             Render.Instance.PrintSteering(dungeon, player);
             Render.Instance.printEnemies(dungeon);
             Render.Instance.printEnemiesInfo(dungeon, player);
             Render.Instance.PrintActiveEffects(turnManager);
             Render.Instance.PrintLogs();
         }
+
+        public void RenderServer(Dungeon dungeon, Dictionary<int, Player> players)
+        {
+            Render.Instance.printWorld(dungeon);
+            Render.Instance.printItems(dungeon);
+            Render.Instance.PrintPlayers(players,-1);
+        }
+
+        public void RenderFull(Dungeon dungeon, Dictionary<int, Player> players, int local_player_id,TurnManager turnManager)
+        {
+            if (!players.TryGetValue(local_player_id, out Player player))
+            {
+                Console.WriteLine($"Player id {local_player_id} not found in players dictionary");
+                return;
+            }
+            Render.Instance.printWorld(dungeon);
+            Render.Instance.printItems(dungeon);
+            Render.Instance.PrintPlayer(player);
+            Render.Instance.PrintStats(player);
+            Render.Instance.PrintInventory(player);
+            Render.Instance.PrintHands(player);
+            Render.Instance.PrintTileInfo(dungeon.map[player.pos_x][player.pos_y]);
+            Render.Instance.PrintSteering(dungeon, player);
+            Render.Instance.printEnemies(dungeon);
+            Render.Instance.printEnemiesInfo(dungeon, player);
+            Render.Instance.PrintActiveEffects(turnManager);
+            Render.Instance.PrintLogs();
+        }
+
+        public void RenderUpdate(Dungeon dungeon, Dictionary<int, Player> players, int local_player_id ,TurnManager turnManager)
+        {
+            Player player = players[local_player_id];
+            Render.Instance.PrintStats(player);
+            Render.Instance.PrintInventory(player);
+            Render.Instance.PrintHands(player);
+            Render.Instance.PrintTileInfo(dungeon.map[player.pos_x][player.pos_y]);
+            Render.Instance.PrintSteering(dungeon, player);
+            Render.Instance.printEnemies(dungeon);
+            Render.Instance.printEnemiesInfo(dungeon, player);
+            Render.Instance.PrintActiveEffects(turnManager);
+            Render.Instance.PrintLogs();
+        }
+
+
     }
 }

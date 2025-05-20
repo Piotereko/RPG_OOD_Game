@@ -6,6 +6,7 @@ using RPG_wiedzmin_wanna_be.Model.World;
 using System;
 using System.Text;
 using RPG_wiedzmin_wanna_be.Model.Game;
+using System.Numerics;
 
 namespace RPG_wiedzmin_wanna_be.View
 {
@@ -96,7 +97,7 @@ namespace RPG_wiedzmin_wanna_be.View
             {
                 for (int j = 0; j < _world.width; j++)
                 {
-                    if (_world.map[j, i].IsWall)
+                    if (_world.map[j][i].IsWall)
                     {
                         Console.Write("█");
                     }
@@ -115,7 +116,7 @@ namespace RPG_wiedzmin_wanna_be.View
             foreach (IItem item in world.items)
             {
                 Console.SetCursorPosition(item.X_position, item.Y_position);
-                Tile tile = world.map[item.X_position, item.Y_position];
+                Tile tile = world.map[item.X_position][item.Y_position];
                 if (tile.items.Count > 1)
                 {
                     Console.Write("M");
@@ -402,6 +403,41 @@ namespace RPG_wiedzmin_wanna_be.View
             {
                 Console.SetCursorPosition(96, 2 + index++);
                 Console.Write($"{effect.Name}({effect.Duration})");
+            }
+        }
+
+        public void PrintPlayers(Dictionary<int,Player> players,int local_id)
+        {
+            if (local_id == -1)
+            {
+                foreach (var player in players.Values)
+                {
+                    Console.SetCursorPosition(player.pos_x, player.pos_y);
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.WriteLine($"{player.player_id}");
+                    Console.ResetColor();
+                }
+            }
+            else
+            {
+                foreach(var kvp in players)
+                {
+                    Player pl = kvp.Value;
+                    if(local_id == kvp.Key)
+                    {
+                        Console.SetCursorPosition(pl.pos_x, pl.pos_y);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"{pl.player_id}");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.SetCursorPosition(pl.pos_x, pl.pos_y);
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine($"{pl.player_id}");
+                        Console.ResetColor();
+                    }
+                }
             }
         }
     }

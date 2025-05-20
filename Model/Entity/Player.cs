@@ -13,6 +13,8 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity
 {
     public class Player : IEntity
     {
+
+        public int player_id;
         public int pos_x { get; set; }
         public int pos_y { get; set; }
         public int strength { get; set; }
@@ -42,7 +44,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity
 
         public List<IEffect> active_effects;
 
-        public Player(int pos_x = 1, int pos_y = 1, int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
+        public Player(int player_id,int pos_x = 1, int pos_y = 1, int strength = 10, int dexterity = 10, int health = 10, int luck = 10, int agression = 10, int wisdom = 10)
         {
             this.pos_x = pos_x;
             this.pos_y = pos_y;
@@ -52,6 +54,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity
             this.luck = luck;
             this.agression = agression;
             this.wisdom = wisdom;
+            this.player_id = player_id;
 
             gold_amount = 0;
             coins_amount = 0;

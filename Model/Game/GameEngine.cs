@@ -8,19 +8,23 @@ using RPG_wiedzmin_wanna_be.View;
 using static RPG_wiedzmin_wanna_be.Game.ActionHandling.AttackModeHandler;
 using static RPG_wiedzmin_wanna_be.Model.Game.ActionHandling.EquipAction;
 using RPG_wiedzmin_wanna_be.Model.Game.ActionHandling;
+using RPG_wiedzmin_wanna_be.Controller;
+using RPG_wiedzmin_wanna_be.DTO.Commands;
 
 namespace RPG_wiedzmin_wanna_be.Model.Game
 {
     internal class GameEngine
     {
         private Dungeon dungeon;
-        private Player player = new Player();
+        private Player player = new Player(1);
         private DungeonBuilder builder;
         private DungeonDirector director;
-        private BasePlayerAction actionHandlerChain;
         private readonly ConsoleView view = new ConsoleView();
-
         private TurnManager turnManager;
+
+
+        private InputHandlerChain inputHandlerChain;
+        private ActionExecutor actionExecutor;
 
 
 
@@ -32,7 +36,10 @@ namespace RPG_wiedzmin_wanna_be.Model.Game
 
             dungeon = builder.Build();
             dungeon = director.CreateTest();
-            InitializeActionHandlers();
+
+            inputHandlerChain = new InputHandlerChain(dungeon);
+            actionExecutor = new ActionExecutor();
+            
         }
 
         public void CreateDungeon()
@@ -40,42 +47,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Game
             dungeon = director.CreateTest();
         }
 
-        private void InitializeActionHandlers()
-        {
-            var moveHandler = new MoveAction();
-            var inventoryNavHandler = new InventoryNavigationHandler();
-            var inventorySwitchHandler = new InventorySwitchAction();
-            var exitHandler = new ExitHandler();
-            var attackmode = new AttackModeHandler();
-            var attackHandler = new AttackAction();
-
-
-
-            var currentHandler = moveHandler
-                .SetNext(inventoryNavHandler)
-                .SetNext(inventorySwitchHandler)
-                .SetNext(attackHandler)
-                .SetNext(attackmode);
-
-
-            if (dungeon.items.Count > 0)
-            {
-                var pickUpHandler = new ItemPickUpAction();
-                var dropHandler = new ItemDropAction();
-                var equipHandler = new EquipAction();
-
-                currentHandler
-                    .SetNext(pickUpHandler)
-                    .SetNext(dropHandler)
-                    .SetNext(equipHandler);
-            }
-
-            currentHandler
-                .SetNext(exitHandler);
-
-
-            actionHandlerChain = moveHandler;
-        }
+        
 
 
 
@@ -84,28 +56,27 @@ namespace RPG_wiedzmin_wanna_be.Model.Game
 
             Console.Clear();
             Console.CursorVisible = false;
-            /*            Render.Instance.printWorld(dungeon);
-                        Render.Instance.printItems(dungeon);
-                        Render.Instance.PrintPlayer(player);*/
+
             view.RenderFull(dungeon, player, turnManager);
 
             while (true)
             {
                 view.RenderUpdate(dungeon, player, turnManager);
-                /*                Render.Instance.PrintStats(player);
-                                Render.Instance.PrintInventory(player);
-                                Render.Instance.PrintTileInfo(dungeon.map[player.pos_x, player.pos_y]);
-                                Render.Instance.PrintHands(player);
-                                Render.Instance.PrintSteering(dungeon, player);
-                                Render.Instance.printEnemies(dungeon);
-                                Render.Instance.printEnemiesInfo(dungeon,player);
-                                Render.Instance.PrintActiveEffects(turnManager);
-                                Render.Instance.PrintLogs();*/
+       
                 turnManager.UpdateEffects();
 
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
-                actionHandlerChain.HandleAction(key.Key, player, dungeon, turnManager);
+
+                PlayerCommand? command = inputHandlerChain.Handle(key.Key);
+                if(command != null)
+                {
+                    actionExecutor.Execute(command, player, dungeon, turnManager);
+
+                }
+                else
+                    Logger.PrintLog($"Unhandled key: {key.Key}");
+
 
             }
         }

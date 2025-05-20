@@ -9,13 +9,13 @@ namespace RPG_wiedzmin_wanna_be.Model.World
 {
     public class Tile
     {
-        public int pos_x;
-        public int pos_y;
-        public List<IItem> items;
+        public int pos_x {  get; set; }
+        public int pos_y { get; set; }
+        public List<IItem> items { get; set; }
         public bool IsWall { get; set; }
         public Tile()
         {
-            items = null;
+            //items = null;
             IsWall = false;
             items = new List<IItem>();
         }

@@ -24,7 +24,7 @@ namespace RPG_wiedzmin_wanna_be.Model
                     HandleMoveCommand(command as MoveCommand, player, dungeon);
                     break;
                 case "equip":
-                    HandleEquipCommand(command as EquipCommand, player, turnManager);
+                    HandleEquipCommand(player, turnManager);
                     break;
                 case "attack":
                     HandleAttackCommand(player, dungeon);
@@ -91,9 +91,9 @@ namespace RPG_wiedzmin_wanna_be.Model
 
         private void TryWalk(int newX, int newY, Player player, Dungeon dungeon)
         {
-            if (!dungeon.map[newX, newY].IsWall)
+            if (!dungeon.map[newX][ newY].IsWall)
             {
-                Render.Instance.printTile(dungeon.map[player.pos_x, player.pos_y]);
+                Render.Instance.printTile(dungeon.map[player.pos_x][ player.pos_y]);
                 player.pos_x = newX;
                 player.pos_y = newY;
                 Render.Instance.PrintPlayer(player);
@@ -104,30 +104,17 @@ namespace RPG_wiedzmin_wanna_be.Model
             }
         }
 
-        private void HandleEquipCommand(EquipCommand? equipCmd, Player player, TurnManager turnManager)
+        private void HandleEquipCommand(Player player, TurnManager turnManager)
         {
-            if (equipCmd == null)
-                return;
-
-            if (equipCmd.Parameters.TryGetValue("mode", out string? mode))
-            {
-                if (mode == "equip" || player.InInventory) 
+  
+                if (player.InInventory) 
                 {
                     TryEquipItem(player, turnManager);
                 }
-                else if (mode == "unequip")
+                else
                 {
                     Unequip(player);
                 }
-                else
-                {
-                    Logger.PrintLog($"Unknown equip mode: {mode}");
-                }
-            }
-            else
-            {
-                Logger.PrintLog("Equip command missing 'mode' parameter.");
-            }
         }
 
         private void TryEquipItem(Player player, TurnManager turnManager)
@@ -340,7 +327,7 @@ namespace RPG_wiedzmin_wanna_be.Model
         }
         private void HandlePickUpCommand(Player player, Dungeon dungeon)
         {
-            var tile = dungeon.map[player.pos_x, player.pos_y];
+            var tile = dungeon.map[player.pos_x][player.pos_y];
 
             if (tile.items.Count > 0)
             {
@@ -404,7 +391,7 @@ namespace RPG_wiedzmin_wanna_be.Model
         {
             if (player.InInventory && player.inventory.Count > 0)
             {
-                Tile tile = dungeon.map[player.pos_x, player.pos_y];
+                Tile tile = dungeon.map[player.pos_x][player.pos_y];
                 IItem item = player.inventory[player.inventory_pos];
 
                 item.X_position = player.pos_x;
@@ -436,7 +423,7 @@ namespace RPG_wiedzmin_wanna_be.Model
 
             if (item == null) return false;
 
-            Tile tile = dungeon.map[player.pos_x, player.pos_y];
+            Tile tile = dungeon.map[player.pos_x][  player.pos_y];
             item.X_position = player.pos_x;
             item.Y_position = player.pos_y;
             item.DropMe(player);
@@ -480,13 +467,13 @@ namespace RPG_wiedzmin_wanna_be.Model
 
         private void HandleInventoryNavigateCommand(InventoryNavigateCommand? cmd, Player player)
         {
-            if (cmd == null || !cmd.Parameters.TryGetValue("direction", out string? direction))
+            if (cmd == null || !cmd.Parameters.TryGetValue("target", out string? target))
             {
                 Logger.PrintLog("InventoryNavigate command missing 'direction' parameter.");
                 return;
             }
 
-            switch (direction.ToLower())
+            switch (target.ToLower())
             {
                 case "left":  // Corresponds to ConsoleKey.D1
                     if (player.InInventory)
@@ -521,7 +508,7 @@ namespace RPG_wiedzmin_wanna_be.Model
                     break;
 
                 default:
-                    Logger.PrintLog($"Unknown inventory navigation direction: {direction}");
+                    Logger.PrintLog($"Unknown inventory navigation direction: {target}");
                     break;
             }
         }

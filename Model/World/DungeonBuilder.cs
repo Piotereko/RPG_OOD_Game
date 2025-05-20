@@ -21,7 +21,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
             {
                 for (int j = 1; j < dungeon.width - 1; j++)
                 {
-                    dungeon.map[j, i].IsWall = false;
+                    dungeon.map[j][i].IsWall = false;
                 }
             }
             return this;
@@ -34,7 +34,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
             {
                 for (int j = 0; j < dungeon.width; j++)
                 {
-                    dungeon.map[j, i].IsWall = true;
+                    dungeon.map[j][i].IsWall = true;
                 }
             }
             return this;
@@ -50,7 +50,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
             {
                 for (int x = start_x; x < start_x + room_width; x++)
                 {
-                    dungeon.map[x, y].IsWall = false;
+                    dungeon.map[x][y].IsWall = false;
                 }
             }
             return this;
@@ -75,7 +75,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                 {
                     for (int dx = 0; dx < chamber_size; dx++)
                     {
-                        dungeon.map[player_x + dx, player_y + dy].IsWall = false;
+                        dungeon.map[player_x + dx][player_y + dy].IsWall = false;
                     }
                 }
             }
@@ -103,7 +103,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                     {
                         for (int dx = 0; dx < chamber_size; dx++)
                         {
-                            dungeon.map[x + dx, y + dy].IsWall = false;
+                            dungeon.map[x + dx][y + dy].IsWall = false;
                         }
                     }
                 }
@@ -123,7 +123,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                 int x = random.Next(1, dungeon.width - 1);
                 int y = random.Next(1, dungeon.height - 1);
 
-                if (!dungeon.map[x, y].IsWall)
+                if (!dungeon.map[x][y].IsWall)
                 {
                     Enemy enemy = RandomEnemiesFactory.CreateRandomEnemy(x, y);
                     dungeon.enemies.Add(enemy);
@@ -144,7 +144,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                 int x = random.Next(1, dungeon.width - 1);
                 int y = random.Next(1, dungeon.height - 1);
 
-                if (!dungeon.map[x, y].IsWall)
+                if (!dungeon.map[x][ y].IsWall)
                 {
                     IItem item = radnomFactory.CreateRandomItem(x, y);
                     if (item.IsEquipable)
@@ -176,7 +176,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                 int x = random.Next(1, dungeon.width - 1);
                 int y = random.Next(1, dungeon.height - 1);
 
-                if (!dungeon.map[x, y].IsWall)
+                if (!dungeon.map[x][y].IsWall)
                 {
                     IItem item = radnomFactory.CreateRandomModifiedWeapon(x, y);
                     dungeon.AddItem(item);
@@ -200,7 +200,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                     {
                         if (random.Next(0, 5) < 3)
                         {
-                            dungeon.map[j, i].IsWall = false;
+                            dungeon.map[j][i].IsWall = false;
                         }
                     }
                 }
@@ -220,7 +220,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                         currentX++;
                     else if (currentX > targetX)
                         currentX--;
-                    dungeon.map[currentX, currentY].IsWall = false;
+                    dungeon.map[currentX][currentY].IsWall = false;
                 }
                 while (currentY != targetY)
                 {
@@ -228,7 +228,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                         currentY++;
                     else if (currentY > targetY)
                         currentY--;
-                    dungeon.map[currentX, currentY].IsWall = false;
+                    dungeon.map[currentX][currentY].IsWall = false;
                 }
             }
 
@@ -248,7 +248,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                 int x = random.Next(1, dungeon.width - 1);
                 int y = random.Next(1, dungeon.height - 1);
 
-                if (!dungeon.map[x, y].IsWall)
+                if (!dungeon.map[x][y].IsWall)
                 {
                     IItem item = radnomFactory.CreateRandomPotion(x, y);
                     dungeon.AddItem(item);
@@ -270,7 +270,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
                 int x = random.Next(1, dungeon.width - 1);
                 int y = random.Next(1, dungeon.height - 1);
 
-                if (!dungeon.map[x, y].IsWall)
+                if (!dungeon.map[x][y].IsWall)
                 {
                     IItem item = radnomFactory.CreateRadnomWeapon(x, y);
                     dungeon.AddItem(item);

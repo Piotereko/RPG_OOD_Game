@@ -1,4 +1,5 @@
-﻿using RPG_wiedzmin_wanna_be.Model.Game;
+﻿using RPG_wiedzmin_wanna_be.Controller;
+using RPG_wiedzmin_wanna_be.Model.Game;
 
 namespace RPG_wiedzmin_wanna_be
 {
@@ -6,8 +7,10 @@ namespace RPG_wiedzmin_wanna_be
     {
         static void Main(string[] args)
         {
-            GameEngine game = new GameEngine();
-            game.Run();
+            /*GameEngine game = new GameEngine();
+            game.Run();*/
+            GameController controller = new GameController();
+            controller.SelectMode();
         }
     }
 }
