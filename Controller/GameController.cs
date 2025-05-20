@@ -23,7 +23,7 @@ namespace RPG_wiedzmin_wanna_be.Controller
         private TurnManager turnManager;
         private InputHandlerChain inputHandlerChain;
         private ActionExecutor actionExecutor;
-        private ConsoleView view;
+
 
         private Server? server;
         private Client? client;
@@ -36,8 +36,7 @@ namespace RPG_wiedzmin_wanna_be.Controller
             builder = new DungeonBuilder();
             director = new DungeonDirector(builder);
             turnManager = new TurnManager();
-            //player = new Player();
-            view = new ConsoleView();
+           
 
 
             dungeon = builder.Build();
@@ -46,7 +45,7 @@ namespace RPG_wiedzmin_wanna_be.Controller
             inputHandlerChain = new InputHandlerChain(dungeon);
             actionExecutor = new ActionExecutor();
 
-            //SelectMode();
+           
         }
 
         public void SelectMode()
@@ -72,7 +71,6 @@ namespace RPG_wiedzmin_wanna_be.Controller
 
         private void StartServer()
         {
-            // Wrap your dungeon+player into a GameState object
             var initialState = new GameState
             {
                 Dungeon = dungeon,
@@ -99,7 +97,7 @@ namespace RPG_wiedzmin_wanna_be.Controller
                 //view.RenderServer(server.gameState.Dungeon, server.gameState.Players);
                 turnManager.UpdateEffects();
 
-                Thread.Sleep(100); // small delay to prevent tight loop
+                Thread.Sleep(100); 
             }
         }
 
@@ -125,7 +123,7 @@ namespace RPG_wiedzmin_wanna_be.Controller
                 if (client?.CurrentGameState != null)
                 {
                     var gs = client.CurrentGameState;
-                    view.RenderFull(gs.Dungeon, gs.Players,client.local_player_id, gs.TurnManager);
+                    ConsoleView.RenderFull(gs.Dungeon, gs.Players,client.local_player_id, gs.TurnManager);
                 }
                 else
                 {
@@ -167,11 +165,11 @@ namespace RPG_wiedzmin_wanna_be.Controller
             Console.Clear();
             Console.CursorVisible = false;
             Player player = new Player(0);
-            view.RenderFull(dungeon, player, turnManager);
+            ConsoleView.RenderFull(dungeon, player, turnManager);
 
             while (true)
             {
-                view.RenderUpdate(dungeon, player, turnManager);
+                ConsoleView.RenderUpdate(dungeon, player, turnManager);
                 turnManager.UpdateEffects();
 
                 ConsoleKeyInfo key = Console.ReadKey(true);

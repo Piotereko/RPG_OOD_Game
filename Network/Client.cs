@@ -1,5 +1,6 @@
 ﻿using RPG_wiedzmin_wanna_be.Controller;
 using RPG_wiedzmin_wanna_be.DTO.Commands;
+using RPG_wiedzmin_wanna_be.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace RPG_wiedzmin_wanna_be.Network
     {
         private readonly TcpClient tcpClient;
         private readonly NetworkStream stream;
-        private readonly byte[] buffer = new byte[4096];
+        private readonly byte[] buffer = new byte[65536];
 
         public GameState CurrentGameState { get; private set; }
         public int local_player_id { get; private set; }
@@ -36,27 +37,10 @@ namespace RPG_wiedzmin_wanna_be.Network
             {
                 while (true)
                 {
-                    byte[] lengthBytes = new byte[4];
-                    int read = 0;
-                    while (read < 4)
-                    {
-                        int bytesRead = stream.Read(lengthBytes, read, 4 - read);
-                        if (bytesRead == 0) throw new Exception("Disconnected");
-                        read += bytesRead;
-                    }
-                    int messageLength = BitConverter.ToInt32(lengthBytes, 0);
+                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break;
 
-                    
-                    byte[] data = new byte[messageLength];
-                    read = 0;
-                    while (read < messageLength)
-                    {
-                        int bytesRead = stream.Read(data, read, messageLength - read);
-                        if (bytesRead == 0) throw new Exception("Disconnected");
-                        read += bytesRead;
-                    }
-
-                    string json = Encoding.UTF8.GetString(data);
+                    string json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
 
                     try
                     {
@@ -65,7 +49,7 @@ namespace RPG_wiedzmin_wanna_be.Network
                         {
                             local_player_id = initData.playerId;
                             CurrentGameState = initData.GameState;
-                            continue;  
+                            continue;  // Continue to next message
                         }
                     }
                     catch
@@ -75,7 +59,8 @@ namespace RPG_wiedzmin_wanna_be.Network
 
                     CurrentGameState = JsonHelper.Deserialize<GameState>(json);
 
-                   
+
+                    ConsoleView.RenderUpdate(CurrentGameState.Dungeon, CurrentGameState.Players, local_player_id, CurrentGameState.TurnManager);
                 }
             }
             catch (Exception ex)
@@ -86,13 +71,12 @@ namespace RPG_wiedzmin_wanna_be.Network
 
         public void SendCommand(PlayerCommand command)
         {
+            command.PlayerId = local_player_id;
             string json = JsonSerializer.Serialize(command);
             byte[] data = Encoding.UTF8.GetBytes(json);
-            byte[] lengthPrefix = BitConverter.GetBytes(data.Length);
 
             try
             {
-                stream.Write(lengthPrefix, 0, lengthPrefix.Length);
                 stream.Write(data, 0, data.Length);
             }
             catch (Exception ex)

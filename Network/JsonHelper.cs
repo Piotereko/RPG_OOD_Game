@@ -17,9 +17,10 @@ namespace RPG_wiedzmin_wanna_be.Network
             Formatting = Formatting.Indented
         };
 
-        public static string SerializeGameState(GameState gameState)
+
+        public static string SerializeObject(object obj)
         {
-            return JsonConvert.SerializeObject(gameState, JsonSettings);
+            return JsonConvert.SerializeObject(obj, JsonSettings);
         }
 
         public static T Deserialize<T>(string json)

@@ -78,7 +78,7 @@ namespace RPG_wiedzmin_wanna_be.Network
 
         public void BroadcastGameState()
         {
-            string json = JsonHelper.SerializeGameState(gameState);
+            string json = JsonHelper.SerializeObject(gameState);
             byte[] buffer = Encoding.UTF8.GetBytes(json);
 
             lock (clientsLock)
@@ -118,7 +118,7 @@ namespace RPG_wiedzmin_wanna_be.Network
         private readonly int playerId;
         private readonly Server server;
 
-        private readonly byte[] buffer = new byte[4096];
+        private readonly byte[] buffer = new byte[65536];
 
         public ClientHandler(TcpClient tcpClient, int playerId, Server server)
         {
@@ -132,38 +132,21 @@ namespace RPG_wiedzmin_wanna_be.Network
         {
             try
             {
-                
+              
                 SendInitialGameState();
 
                 while (true)
                 {
-                    byte[] lengthBytes = new byte[4];
-            int read = 0;
-            while (read < 4)
-            {
-                int bytesRead = stream.Read(lengthBytes, read, 4 - read);
-                if (bytesRead == 0) return; // Client disconnected
-                read += bytesRead;
-            }
-            int messageLength = BitConverter.ToInt32(lengthBytes, 0);
+                    int bytesRead = stream.Read(buffer, 0, buffer.Length);
+                    if (bytesRead == 0) break; 
 
-            // Read full message
-            byte[] data = new byte[messageLength];
-            read = 0;
-            while (read < messageLength)
-            {
-                int bytesRead = stream.Read(data, read, messageLength - read);
-                if (bytesRead == 0) return; // Client disconnected
-                read += bytesRead;
-            }
+                    string json = Encoding.UTF8.GetString(buffer, 0, bytesRead);
+                    var command = JsonHelper.Deserialize<PlayerCommand>(json);
 
-            string json = Encoding.UTF8.GetString(data);
-
-            var command = JsonSerializer.Deserialize<PlayerCommand>(json);
-            if (command != null)
-            {
-                server.ProcessCommand(playerId, command);
-            }
+                    if (command != null)
+                    {
+                        server.ProcessCommand(playerId, command);
+                    }
                 }
             }
             catch (Exception ex)
@@ -183,21 +166,11 @@ namespace RPG_wiedzmin_wanna_be.Network
             {
                 playerId = playerId,
                 GameState = server.gameState
-            };
 
-            string json = JsonSerializer.Serialize(init_data);
+        };
+            string json = JsonHelper.SerializeObject(init_data);
             byte[] data = Encoding.UTF8.GetBytes(json);
-            byte[] lengthPrefix = BitConverter.GetBytes(data.Length);
-
-            try
-            {
-                stream.Write(lengthPrefix, 0, lengthPrefix.Length);
-                stream.Write(data, 0, data.Length);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error sending initial game state to player {playerId}: {ex.Message}");
-            }
+            stream.Write(data, 0, data.Length);
         }
 
     internal class InitialConnectionData
@@ -210,8 +183,6 @@ namespace RPG_wiedzmin_wanna_be.Network
         {
             try
             {
-                byte[] lengthPrefix = BitConverter.GetBytes(data.Length);
-                stream.Write(lengthPrefix, 0, lengthPrefix.Length);
                 stream.Write(data, 0, data.Length);
             }
             catch (Exception ex)

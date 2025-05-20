@@ -6,10 +6,10 @@ using RPG_wiedzmin_wanna_be.Model.Game;
 
 namespace RPG_wiedzmin_wanna_be.View
 {
-    public class ConsoleView
+    public static class ConsoleView
     {
 
-        public void RenderUpdate(Dungeon dungeon, Player player, TurnManager turnManager)
+        public static void RenderUpdate(Dungeon dungeon, Player player, TurnManager turnManager)
         {
             Render.Instance.PrintStats(player);
             Render.Instance.PrintInventory(player);
@@ -21,7 +21,7 @@ namespace RPG_wiedzmin_wanna_be.View
             Render.Instance.PrintActiveEffects(turnManager);
             Render.Instance.PrintLogs();
         }
-        public void RenderFull(Dungeon dungeon, Player player, TurnManager turnManager)
+        public static void RenderFull(Dungeon dungeon, Player player, TurnManager turnManager)
         {
             Render.Instance.printWorld(dungeon);
             Render.Instance.printItems(dungeon);
@@ -37,15 +37,16 @@ namespace RPG_wiedzmin_wanna_be.View
             Render.Instance.PrintLogs();
         }
 
-        public void RenderServer(Dungeon dungeon, Dictionary<int, Player> players)
+        public static void RenderServer(Dungeon dungeon, Dictionary<int, Player> players)
         {
             Render.Instance.printWorld(dungeon);
             Render.Instance.printItems(dungeon);
             Render.Instance.PrintPlayers(players,-1);
         }
 
-        public void RenderFull(Dungeon dungeon, Dictionary<int, Player> players, int local_player_id,TurnManager turnManager)
+        public static void RenderFull(Dungeon dungeon, Dictionary<int, Player> players, int local_player_id,TurnManager turnManager)
         {
+        
             if (!players.TryGetValue(local_player_id, out Player player))
             {
                 Console.WriteLine($"Player id {local_player_id} not found in players dictionary");
@@ -65,7 +66,7 @@ namespace RPG_wiedzmin_wanna_be.View
             Render.Instance.PrintLogs();
         }
 
-        public void RenderUpdate(Dungeon dungeon, Dictionary<int, Player> players, int local_player_id ,TurnManager turnManager)
+        public static void RenderUpdate(Dungeon dungeon, Dictionary<int, Player> players, int local_player_id ,TurnManager turnManager)
         {
             Player player = players[local_player_id];
             Render.Instance.PrintStats(player);

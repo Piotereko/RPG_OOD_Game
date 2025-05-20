@@ -8,6 +8,7 @@ namespace RPG_wiedzmin_wanna_be.DTO.Commands
 {
     public class PlayerCommand
     {
+        public int PlayerId { get; set; }
         public string Type { get; set; }
         public Dictionary<string, string> Parameters { get; set; } = new();
     }

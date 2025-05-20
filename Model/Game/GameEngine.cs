@@ -19,7 +19,6 @@ namespace RPG_wiedzmin_wanna_be.Model.Game
         private Player player = new Player(1);
         private DungeonBuilder builder;
         private DungeonDirector director;
-        private readonly ConsoleView view = new ConsoleView();
         private TurnManager turnManager;
 
 
@@ -57,11 +56,11 @@ namespace RPG_wiedzmin_wanna_be.Model.Game
             Console.Clear();
             Console.CursorVisible = false;
 
-            view.RenderFull(dungeon, player, turnManager);
+            ConsoleView.RenderFull(dungeon, player, turnManager);
 
             while (true)
             {
-                view.RenderUpdate(dungeon, player, turnManager);
+                ConsoleView.RenderUpdate(dungeon, player, turnManager);
        
                 turnManager.UpdateEffects();
 
