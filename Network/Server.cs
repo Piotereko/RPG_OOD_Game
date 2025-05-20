@@ -21,7 +21,6 @@ namespace RPG_wiedzmin_wanna_be.Network
         private readonly List<ClientHandler> clients = new();
         private readonly object clientsLock = new();
 
-        //private Dictionary<int, Player> players = new Dictionary<int, Player>();
 
         public GameState gameState;
         private ActionExecutor actionExecutor;
@@ -30,6 +29,8 @@ namespace RPG_wiedzmin_wanna_be.Network
         {
             port = _port;
             gameState = initialState;
+            actionExecutor = new ActionExecutor();
+
         }
 
         public void Start()
@@ -104,6 +105,7 @@ namespace RPG_wiedzmin_wanna_be.Network
                 }
             }
 
+
             actionExecutor.Execute(command, player, gameState.Dungeon, gameState.TurnManager);
             BroadcastGameState();
         }
@@ -118,7 +120,7 @@ namespace RPG_wiedzmin_wanna_be.Network
         private readonly int playerId;
         private readonly Server server;
 
-        private readonly byte[] buffer = new byte[65536];
+        private readonly byte[] buffer = new byte[262144];
 
         public ClientHandler(TcpClient tcpClient, int playerId, Server server)
         {

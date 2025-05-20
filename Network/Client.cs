@@ -16,7 +16,7 @@ namespace RPG_wiedzmin_wanna_be.Network
     {
         private readonly TcpClient tcpClient;
         private readonly NetworkStream stream;
-        private readonly byte[] buffer = new byte[65536];
+        private readonly byte[] buffer = new byte[262144];
 
         public GameState CurrentGameState { get; private set; }
         public int local_player_id { get; private set; }
@@ -49,7 +49,7 @@ namespace RPG_wiedzmin_wanna_be.Network
                         {
                             local_player_id = initData.playerId;
                             CurrentGameState = initData.GameState;
-                            continue;  // Continue to next message
+                            continue;
                         }
                     }
                     catch
@@ -72,7 +72,7 @@ namespace RPG_wiedzmin_wanna_be.Network
         public void SendCommand(PlayerCommand command)
         {
             command.PlayerId = local_player_id;
-            string json = JsonSerializer.Serialize(command);
+            string json = JsonHelper.SerializeObject(command);
             byte[] data = Encoding.UTF8.GetBytes(json);
 
             try

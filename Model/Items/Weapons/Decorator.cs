@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RPG_wiedzmin_wanna_be.Model.Entity;
 using RPG_wiedzmin_wanna_be.Model.Game;
 using RPG_wiedzmin_wanna_be.Visitor_pattern;
@@ -12,6 +13,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Items.Weapons
 {
     public abstract class Decorator : Weapon
     {
+        [JsonProperty(TypeNameHandling = TypeNameHandling.Auto)]
         protected Weapon weapon;
         protected Decorator(Weapon _weapon) : base(_weapon.Name, _weapon.damage, _weapon.X_position, _weapon.Y_position)
         {

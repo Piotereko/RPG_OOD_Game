@@ -94,7 +94,8 @@ namespace RPG_wiedzmin_wanna_be.Controller
 
             while (true)
             {
-                //view.RenderServer(server.gameState.Dungeon, server.gameState.Players);
+                ConsoleView.RenderServer(server.gameState.Dungeon, server.gameState.Players);
+
                 turnManager.UpdateEffects();
 
                 Thread.Sleep(100); 

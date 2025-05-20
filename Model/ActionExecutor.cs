@@ -21,7 +21,7 @@ namespace RPG_wiedzmin_wanna_be.Model
             switch (command.Type)
             {
                 case "move":
-                    HandleMoveCommand(command as MoveCommand, player, dungeon);
+                    HandleMoveCommand(command , player, dungeon);
                     break;
                 case "equip":
                     HandleEquipCommand(player, turnManager);
@@ -39,7 +39,7 @@ namespace RPG_wiedzmin_wanna_be.Model
                     System.Environment.Exit(0);
                     break;
                 case "inventorynavigate":
-                    HandleInventoryNavigateCommand(command as InventoryNavigateCommand, player);
+                    HandleInventoryNavigateCommand(command , player);
                     break;
                 case "inventoryswitch":
                     HandleInventorySwitchCommand(player);
@@ -53,12 +53,11 @@ namespace RPG_wiedzmin_wanna_be.Model
             }
         }
 
-        private void HandleMoveCommand(MoveCommand? moveCmd, Player player, Dungeon dungeon)
+        private void HandleMoveCommand(PlayerCommand command, Player player, Dungeon dungeon)
         {
-            if (moveCmd == null)
-                return;
+            
 
-            if (!moveCmd.Parameters.TryGetValue("direction", out string? direction))
+            if (!command.Parameters.TryGetValue("direction", out string? direction))
             {
                 Logger.PrintLog("Move command missing 'direction' parameter.");
                 return;
@@ -465,9 +464,9 @@ namespace RPG_wiedzmin_wanna_be.Model
             return droppedCount;
         }
 
-        private void HandleInventoryNavigateCommand(InventoryNavigateCommand? cmd, Player player)
+        private void HandleInventoryNavigateCommand(PlayerCommand command, Player player)
         {
-            if (cmd == null || !cmd.Parameters.TryGetValue("target", out string? target))
+            if (command == null || !command.Parameters.TryGetValue("target", out string? target))
             {
                 Logger.PrintLog("InventoryNavigate command missing 'direction' parameter.");
                 return;
