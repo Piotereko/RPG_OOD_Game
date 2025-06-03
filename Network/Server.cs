@@ -4,7 +4,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Text.Json;
@@ -18,8 +17,8 @@ namespace RPG_wiedzmin_wanna_be.Network
     {
         private readonly int port;
         private TcpListener listener;
-        private readonly List<ClientHandler> clients = new();
-        private readonly object clientsLock = new();
+        public List<ClientHandler> clients = new();
+        public object clientsLock = new();
 
 
         public GameState gameState;
@@ -37,8 +36,6 @@ namespace RPG_wiedzmin_wanna_be.Network
         {
             listener = new TcpListener(IPAddress.Any, port);
             listener.Start();
-            Console.WriteLine($"Server started on port {port}.");
-
             var acceptThread = new Thread(AcceptClientsLoop);
             acceptThread.Start();
         }
@@ -113,7 +110,7 @@ namespace RPG_wiedzmin_wanna_be.Network
 
     }
 
-    internal class ClientHandler
+    public class ClientHandler
     {
         private readonly TcpClient tcpClient;
         private readonly NetworkStream stream;
@@ -153,10 +150,24 @@ namespace RPG_wiedzmin_wanna_be.Network
             }
             catch (Exception ex)
             {
+
                 Console.WriteLine($"Client {playerId} disconnected or error: {ex.Message}");
             }
             finally
             {
+                lock (server.gameState)
+                {
+                    if (server.gameState.Players.ContainsKey(playerId))
+                    {
+                        server.gameState.Players.Remove(playerId);
+                        Console.WriteLine($"Player {playerId} removed.");
+                    }
+                }
+                lock (server.clientsLock)
+                {
+                    server.clients.Remove(this);
+                    Console.WriteLine($"ClientHandler for player {playerId} removed.");
+                }
                 tcpClient.Close();
                 
             }

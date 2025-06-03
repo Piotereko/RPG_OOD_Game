@@ -10,7 +10,7 @@ namespace RPG_wiedzmin_wanna_be
             /*GameEngine game = new GameEngine();
             game.Run();*/
             GameController controller = new GameController();
-            controller.SelectMode();
+            controller.Run(args);
         }
     }
 }

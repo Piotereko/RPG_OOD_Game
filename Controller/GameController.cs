@@ -7,23 +7,18 @@ using RPG_wiedzmin_wanna_be.Network;
 using RPG_wiedzmin_wanna_be.View;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 namespace RPG_wiedzmin_wanna_be.Controller
 {
     internal class GameController
     {
         private Dungeon dungeon;
-        //private Player player;
         private DungeonBuilder builder;
         private DungeonDirector director;
         private TurnManager turnManager;
         private InputHandlerChain inputHandlerChain;
         private ActionExecutor actionExecutor;
-
 
         private Server? server;
         private Client? client;
@@ -36,16 +31,68 @@ namespace RPG_wiedzmin_wanna_be.Controller
             builder = new DungeonBuilder();
             director = new DungeonDirector(builder);
             turnManager = new TurnManager();
-           
-
 
             dungeon = builder.Build();
             dungeon = director.CreateTest();
 
             inputHandlerChain = new InputHandlerChain(dungeon);
             actionExecutor = new ActionExecutor();
+        }
 
-           
+        public void Run(string[] args)
+        {
+            if (args != null && args.Length > 0)
+            {
+                if (!ParseArgsAndStart(args))
+                {
+                    Console.WriteLine("Invalid arguments");
+                    SelectMode();
+                }
+            }
+            else
+            {
+                SelectMode();
+            }
+        }
+
+        private bool ParseArgsAndStart(string[] args)
+        {
+            try
+            {
+                if (args[0].Equals("--server", StringComparison.OrdinalIgnoreCase))
+                {
+                    int port = 5555;
+                    if (args.Length > 1 && int.TryParse(args[1], out int p))
+                        port = p;
+
+                    isServer = true;
+                    StartServer(port);
+                    return true;
+                }
+                else if (args[0].Equals("--client", StringComparison.OrdinalIgnoreCase))
+                {
+                    string ip = "127.0.0.1";
+                    int port = 5555;
+
+                    if (args.Length > 1)
+                    {
+                        var parts = args[1].Split(':');
+                        if (parts.Length >= 1 && !string.IsNullOrWhiteSpace(parts[0]))
+                            ip = parts[0];
+                        if (parts.Length == 2 && int.TryParse(parts[1], out int p))
+                            port = p;
+                    }
+
+                    isClient = true;
+                    StartClient(ip, port);
+                    return true;
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void SelectMode()
@@ -55,12 +102,12 @@ namespace RPG_wiedzmin_wanna_be.Controller
             if (key == ConsoleKey.S)
             {
                 isServer = true;
-                StartServer();
+                StartServer(5555); 
             }
             else if (key == ConsoleKey.C)
             {
                 isClient = true;
-                StartClient();
+                StartClient("127.0.0.1", 5555); 
             }
             else
             {
@@ -69,22 +116,21 @@ namespace RPG_wiedzmin_wanna_be.Controller
             }
         }
 
-        private void StartServer()
+        private void StartServer(int port)
         {
             var initialState = new GameState
             {
                 Dungeon = dungeon,
-                
                 TurnManager = turnManager
             };
 
-            server = new Server(5555, initialState);
+            server = new Server(port, initialState);
             server.Start();
 
-            Console.WriteLine("Server started. Press any key to start game loop.");
+            Console.WriteLine($"Server started on port {port}. Press any key to start game loop.");
             Console.ReadKey();
 
-            RunServerLoop();
+            //RunServerLoop();
         }
 
         private void RunServerLoop()
@@ -98,18 +144,14 @@ namespace RPG_wiedzmin_wanna_be.Controller
 
                 turnManager.UpdateEffects();
 
-                Thread.Sleep(100); 
+                Thread.Sleep(1000);
             }
         }
 
-        private void StartClient()
-        {
-            Console.WriteLine("Enter server IP (default 127.0.0.1):");
-            var ip = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(ip))
-                ip = "127.0.0.1";
 
-            client = new Client(ip, 5555);
+        private void StartClient(string ip, int port)
+        {
+            client = new Client(ip, port);
 
             RunClientLoop();
         }
@@ -118,24 +160,33 @@ namespace RPG_wiedzmin_wanna_be.Controller
         {
             Console.Clear();
             Console.CursorVisible = false;
+            bool initial = false;
 
             while (true)
             {
-                if (client?.CurrentGameState != null)
+                var gs = client.CurrentGameState;
+                if (gs != null && initial == false)
                 {
-                    var gs = client.CurrentGameState;
-                    ConsoleView.RenderFull(gs.Dungeon, gs.Players,client.local_player_id, gs.TurnManager);
+                    //var gs = client.CurrentGameState;
+                    ConsoleView.RenderFull(gs.Dungeon, gs.Players, client.local_player_id, gs.TurnManager);
+                    initial = true;
                 }
-                else
+                else if (gs == null)
                 {
                     Console.SetCursorPosition(0, 0);
                     Console.WriteLine("Waiting for game state from server...");
                 }
+                else
+                {
+                    //var gs = client.CurrentGameState;
+
+                    ConsoleView.RenderFull(gs.Dungeon, gs.Players, client.local_player_id, gs.TurnManager);
+                }
 
                 if (Console.KeyAvailable)
                 {
-                    var key = Console.ReadKey(true).Key;
-                    var command = inputHandlerChain.Handle(key);
+                    ConsoleKeyInfo key = Console.ReadKey(true);
+                    PlayerCommand? command = inputHandlerChain.Handle(key.Key);
 
                     if (command != null)
                     {
@@ -147,7 +198,7 @@ namespace RPG_wiedzmin_wanna_be.Controller
                     }
                 }
 
-                Thread.Sleep(50); 
+                Thread.Sleep(200);
             }
         }
 
@@ -172,6 +223,11 @@ namespace RPG_wiedzmin_wanna_be.Controller
             {
                 ConsoleView.RenderUpdate(dungeon, player, turnManager);
                 turnManager.UpdateEffects();
+                foreach (var enemy in dungeon.enemies)
+                {
+                    if (enemy.IsAlive)
+                        enemy.Act(player, dungeon);
+                }
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 PlayerCommand? command = inputHandlerChain.Handle(key.Key);
@@ -187,11 +243,10 @@ namespace RPG_wiedzmin_wanna_be.Controller
         }
     }
 
-
     public class GameState
-        {
-            public Dungeon Dungeon { get; set; } = null!;
-            public Dictionary<int,Player> Players { get; set; } = new Dictionary<int, Player>();
-            public TurnManager TurnManager { get; set; } = null!;
+    {
+        public Dungeon Dungeon { get; set; } = null!;
+        public Dictionary<int, Player> Players { get; set; } = new Dictionary<int, Player>();
+        public TurnManager TurnManager { get; set; } = null!;
     }
 }

@@ -92,6 +92,7 @@ namespace RPG_wiedzmin_wanna_be.View
 
         public void printWorld(Dungeon _world)
         {
+            Console.Clear();
             Console.SetCursorPosition(0,0);
             for (int i = 0; i < _world.height; i++)
             {
@@ -139,17 +140,22 @@ namespace RPG_wiedzmin_wanna_be.View
             for (int i = 0; i < world.enemies.Count; i++)
             {
                 Enemy enemy = world.enemies[i];
-                Console.SetCursorPosition(enemy.pos_x, enemy.pos_y);
-                if (enemy.IsAlive)
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkRed;
-                    Console.Write($"{enemy.EntitySing()}");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    Console.Write(' ');
-                }
+                printEnemy(enemy);
+            }
+        }
+
+        public void printEnemy(Enemy enemy)
+        {
+            Console.SetCursorPosition(enemy.pos_x, enemy.pos_y);
+            if (enemy.IsAlive)
+            {
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write($"{enemy.EntitySing()}");
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.Write(' ');
             }
         }
 
@@ -175,7 +181,7 @@ namespace RPG_wiedzmin_wanna_be.View
                 if (enemyWithDistance.Enemy.IsAlive)
                 {
                     Console.SetCursorPosition(96, 15 + index++);
-                    Console.WriteLine($"{enemyWithDistance.Enemy.GetType().Name} ({enemyWithDistance.Distance:F0}) HP: {enemyWithDistance.Enemy.health}");
+                    Console.WriteLine($"{enemyWithDistance.Enemy.GetType().Name} ({enemyWithDistance.Distance:F0}) {enemyWithDistance.Enemy.Behavior.GetType().Name[0]} HP: {enemyWithDistance.Enemy.health}");
                 }
             }
 

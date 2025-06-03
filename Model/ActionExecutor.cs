@@ -1,5 +1,6 @@
 ﻿using RPG_wiedzmin_wanna_be.DTO.Commands;
 using RPG_wiedzmin_wanna_be.Model.Entity;
+using RPG_wiedzmin_wanna_be.Model.Entity.Strategy;
 using RPG_wiedzmin_wanna_be.Model.Game;
 using RPG_wiedzmin_wanna_be.Model.Items;
 using RPG_wiedzmin_wanna_be.Model.Items.Weapons;
@@ -30,7 +31,7 @@ namespace RPG_wiedzmin_wanna_be.Model
                     HandleAttackCommand(player, dungeon);
                     break;
                 case "pickup":
-                    HandlePickUpCommand(player, dungeon);
+                    HandlePickUpCommand(player, dungeon);                                                                                                                                                                                                                                                                                                                                                           
                     break;
                 case "drop":
                     HandleDropCommand(command as DropCommand, player, dungeon);
@@ -40,7 +41,7 @@ namespace RPG_wiedzmin_wanna_be.Model
                     break;
                 case "inventorynavigate":
                     HandleInventoryNavigateCommand(command , player);
-                    break;
+                    break;                          
                 case "inventoryswitch":
                     HandleInventorySwitchCommand(player);
                     break;
@@ -264,13 +265,13 @@ namespace RPG_wiedzmin_wanna_be.Model
                 _ => new NormalAttackVisitor()
             };
 
-            IDefenseVisitor defenseVisitor = player.attack_mode switch
+/*            IDefenseVisitor defenseVisitor = player.attack_mode switch
             {
                 0 => new NormalDefenseVisitor(),
                 1 => new StealthDefenseVisitor(),
                 2 => new MagicDefenseVisitor(),
                 _ => new NormalDefenseVisitor()
-            };
+            };*/
 
             int rightDamage = 0;
             if (player.RightHandChoosed && player.RightHand != null)
@@ -294,35 +295,50 @@ namespace RPG_wiedzmin_wanna_be.Model
             enemy.TakeDamage(totalDamage);
             Logger.PrintLog($"You attacked {enemy.GetType().Name} for {totalDamage} damage!");
 
+            if (enemy.Behavior.GetType() != typeof(AgressiveBehaviour))
+            {
+                enemy.Behavior = new AgressiveBehaviour();
+                Logger.PrintLog($" {enemy.GetType().Name} is now agressive! ");
+            }
+
+
+          
+
             if (enemy.health <= 0)
             {
                 Logger.PrintLog($"You defeated {enemy.GetType().Name}!");
                 return;
             }
 
-            int leftDefense = 0;
-            if (player.LeftHandChoosed && player.LeftHand != null)
+            if (enemy.health < 5 && enemy.Behavior.GetType() != typeof(SkittishBehaviour))
             {
-                leftDefense = ((Weapon)player.LeftHand).AcceptDeffence(defenseVisitor, player);
+                enemy.Behavior = new SkittishBehaviour();
+                Logger.PrintLog($" {enemy.GetType().Name} is running away! ");
             }
 
-            int rightDefense = 0;
-            if (player.RightHandChoosed && player.RightHand != null)
-            {
-                rightDefense = ((Weapon)player.RightHand).AcceptDeffence(defenseVisitor, player);
-            }
+            /* int leftDefense = 0;
+             if (player.LeftHandChoosed && player.LeftHand != null)
+             {
+                 leftDefense = ((Weapon)player.LeftHand).AcceptDeffence(defenseVisitor, player);
+             }
 
-            int totalDefense = leftDefense + rightDefense;
+             int rightDefense = 0;
+             if (player.RightHandChoosed && player.RightHand != null)
+             {
+                 rightDefense = ((Weapon)player.RightHand).AcceptDeffence(defenseVisitor, player);
+             }
 
-            int enemyDamage = Math.Max(1, enemy.attack_val - totalDefense);
-            player.health -= enemyDamage;
-            Logger.PrintLog($"{enemy.GetType().Name} counterattacked for {enemyDamage} damage!");
+             int totalDefense = leftDefense + rightDefense;*/
 
-            if (player.health <= 0)
-            {
-                Logger.PrintLog("You have been defeated!");
-                Environment.Exit(0);
-            }
+            /* int enemyDamage = Math.Max(1, enemy.attack_val - totalDefense);
+             player.health -= enemyDamage;
+             Logger.PrintLog($"{enemy.GetType().Name} counterattacked for {enemyDamage} damage!");
+
+             if (player.health <= 0)
+             {
+                 Logger.PrintLog("You have been defeated!");
+                 Environment.Exit(0);
+             }*/
         }
         private void HandlePickUpCommand(Player player, Dungeon dungeon)
         {
