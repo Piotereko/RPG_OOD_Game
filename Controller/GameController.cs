@@ -7,6 +7,7 @@ using RPG_wiedzmin_wanna_be.Network;
 using RPG_wiedzmin_wanna_be.View;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Threading;
 
 namespace RPG_wiedzmin_wanna_be.Controller
@@ -188,6 +189,12 @@ namespace RPG_wiedzmin_wanna_be.Controller
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     PlayerCommand? command = inputHandlerChain.Handle(key.Key);
 
+                    foreach (var enemy in gs.Dungeon.enemies)
+                    {
+                        if (enemy.IsAlive)
+                            enemy.Act(gs.Players[client.local_player_id], dungeon);
+                    }
+
                     if (command != null)
                     {
                         client.SendCommand(command);
@@ -222,12 +229,7 @@ namespace RPG_wiedzmin_wanna_be.Controller
             while (true)
             {
                 ConsoleView.RenderUpdate(dungeon, player, turnManager);
-                turnManager.UpdateEffects();
-                foreach (var enemy in dungeon.enemies)
-                {
-                    if (enemy.IsAlive)
-                        enemy.Act(player, dungeon);
-                }
+                
 
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 PlayerCommand? command = inputHandlerChain.Handle(key.Key);

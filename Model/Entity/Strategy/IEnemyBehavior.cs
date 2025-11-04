@@ -10,5 +10,8 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity.Strategy
     public interface IEnemyBehavior
     {
         void Act(Enemy enemy, Player player, Dungeon dungeon);
+
+        public bool Move(Enemy enemy, Player player, Dungeon dungeon);
+        public bool Attack(Enemy enemy, Player player, Dungeon dungeon);
     }
 }

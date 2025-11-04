@@ -22,7 +22,7 @@ namespace RPG_wiedzmin_wanna_be.Model
             switch (command.Type)
             {
                 case "move":
-                    HandleMoveCommand(command , player, dungeon);
+                    HandleMoveCommand(command , player, dungeon, turnManager);
                     break;
                 case "equip":
                     HandleEquipCommand(player, turnManager);
@@ -54,7 +54,7 @@ namespace RPG_wiedzmin_wanna_be.Model
             }
         }
 
-        private void HandleMoveCommand(PlayerCommand command, Player player, Dungeon dungeon)
+        private void HandleMoveCommand(PlayerCommand command, Player player, Dungeon dungeon, TurnManager turner)
         {
             
 
@@ -86,10 +86,10 @@ namespace RPG_wiedzmin_wanna_be.Model
                     return;
             }
 
-            TryWalk(newX, newY, player, dungeon);
+            TryWalk(newX, newY, player, dungeon,turner);
         }
 
-        private void TryWalk(int newX, int newY, Player player, Dungeon dungeon)
+        private void TryWalk(int newX, int newY, Player player, Dungeon dungeon,TurnManager turnManager)
         {
             if (!dungeon.map[newX][ newY].IsWall)
             {
@@ -97,6 +97,12 @@ namespace RPG_wiedzmin_wanna_be.Model
                 player.pos_x = newX;
                 player.pos_y = newY;
                 Render.Instance.PrintPlayer(player);
+                turnManager.UpdateEffects();
+                foreach (var enemy in dungeon.enemies)
+                {
+                    if (enemy.IsAlive)
+                        enemy.Act(player, dungeon);
+                }
             }
             else
             {
@@ -297,11 +303,11 @@ namespace RPG_wiedzmin_wanna_be.Model
 
             if (enemy.Behavior.GetType() != typeof(AgressiveBehaviour))
             {
-                enemy.Behavior = new AgressiveBehaviour();
+                //enemy.Behavior = new AgressiveBehaviour();
                 Logger.PrintLog($" {enemy.GetType().Name} is now agressive! ");
             }
 
-
+            enemy.is_agressive = true;
           
 
             if (enemy.health <= 0)
@@ -312,7 +318,7 @@ namespace RPG_wiedzmin_wanna_be.Model
 
             if (enemy.health < 5 && enemy.Behavior.GetType() != typeof(SkittishBehaviour))
             {
-                enemy.Behavior = new SkittishBehaviour();
+                //enemy.Behavior = new SkittishBehaviour();
                 Logger.PrintLog($" {enemy.GetType().Name} is running away! ");
             }
 

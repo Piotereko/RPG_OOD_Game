@@ -11,6 +11,28 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity.Strategy
     {
         public void Act(Enemy enemy, Player player, Dungeon dungeon)
         {
+            //RunaAway(enemy, player, dungeon);
+            if(!Attack(enemy,player, dungeon))
+            {
+                Move(enemy,player, dungeon);
+            }
+
+        }
+
+        public bool Attack(Enemy enemy, Player player, Dungeon dungeon)
+        {
+            //not attack
+            return false;
+        }
+
+        public bool Move(Enemy enemy, Player player, Dungeon dungeon)
+        {
+           RunaAway(enemy,player, dungeon);
+            return true;
+        }
+
+        private void RunaAway(Enemy enemy, Player player, Dungeon dungeon)
+        {
             int currentDistance = Math.Abs(player.pos_x - enemy.pos_x) + Math.Abs(player.pos_y - enemy.pos_y);
 
             var possibleMoves = new (int x, int y)[]
@@ -19,10 +41,6 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity.Strategy
             (enemy.pos_x - 1, enemy.pos_y),
             (enemy.pos_x, enemy.pos_y + 1),
             (enemy.pos_x, enemy.pos_y - 1),
-            //(enemy.pos_x + 1, enemy.pos_y + 1),
-            //(enemy.pos_x + 1, enemy.pos_y - 1),
-            //(enemy.pos_x - 1, enemy.pos_y + 1),
-            //(enemy.pos_x - 1, enemy.pos_y - 1),
             (enemy.pos_x, enemy.pos_y)
             };
 
@@ -44,9 +62,9 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity.Strategy
             }
 
             //enemy.pos_x = bestMove.x;
-           // enemy.pos_y = bestMove.y;
+            // enemy.pos_y = bestMove.y;
 
-            enemy.TryMove(bestMove.x, bestMove.y,dungeon);
+            enemy.TryMove(bestMove.x, bestMove.y, dungeon);
         }
     }
 }

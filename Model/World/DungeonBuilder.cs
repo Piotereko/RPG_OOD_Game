@@ -115,7 +115,7 @@ namespace RPG_wiedzmin_wanna_be.Model.World
         public IDungeonBuilder AddEnemies()
         {
             Random random = new Random();
-            int number_of_enemies = random.Next(2, 8);
+            int number_of_enemies = random.Next(10,20 );
             int placed = 0;
 
             while (placed < number_of_enemies)

@@ -15,7 +15,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity.Strategy
     {
         public void Act(Enemy enemy, Player player, Dungeon dungeon)
         {
-            int dx = Math.Abs(player.pos_x - enemy.pos_x);
+            /*int dx = Math.Abs(player.pos_x - enemy.pos_x);
             int dy = Math.Abs( player.pos_y - enemy.pos_y);
 
             if(dx <= 1 && dy <= 1)
@@ -27,6 +27,11 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity.Strategy
             else
             {
                 TryMoveTowardPlayer(enemy, player, dungeon);
+            }*/
+
+            if (!Attack(enemy, player, dungeon))
+            {
+                Move(enemy, player, dungeon);
             }
         }
         private void TryMoveTowardPlayer(Enemy enemy, Player player, Dungeon dungeon ) 
@@ -70,6 +75,69 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity.Strategy
             }
 
 
+        }
+
+        public bool Move(Enemy enemy, Player player, Dungeon dungeon)
+        {
+            if (enemy.health <= 5)
+            {
+                RunaAway(enemy, player, dungeon);
+            }
+            else
+            {
+                TryMoveTowardPlayer(enemy, player, dungeon);
+            }
+            return false;
+
+        }
+
+        public bool Attack(Enemy enemy, Player player, Dungeon dungeon)
+        {
+            int dx = Math.Abs(player.pos_x - enemy.pos_x);
+            int dy = Math.Abs(player.pos_y - enemy.pos_y);
+
+            if (dx <= 1 && dy <= 1)
+            {
+                AttackPlayer(enemy, player);
+                return true;
+            }
+            return false;
+        }
+
+        private void RunaAway(Enemy enemy, Player player, Dungeon dungeon)
+        {
+            int currentDistance = Math.Abs(player.pos_x - enemy.pos_x) + Math.Abs(player.pos_y - enemy.pos_y);
+
+            var possibleMoves = new (int x, int y)[]
+            {
+            (enemy.pos_x + 1, enemy.pos_y),
+            (enemy.pos_x - 1, enemy.pos_y),
+            (enemy.pos_x, enemy.pos_y + 1),
+            (enemy.pos_x, enemy.pos_y - 1),
+            (enemy.pos_x, enemy.pos_y)
+            };
+
+            (int x, int y) bestMove = (enemy.pos_x, enemy.pos_y);
+            int bestDistance = currentDistance;
+
+            foreach (var move in possibleMoves)
+            {
+                if (dungeon.map[move.x][move.y].IsWall)
+                    continue;
+
+                int moveDistance = Math.Abs(player.pos_x - move.x) + Math.Abs(player.pos_y - move.y);
+
+                if (moveDistance > bestDistance)
+                {
+                    bestDistance = moveDistance;
+                    bestMove = move;
+                }
+            }
+
+            //enemy.pos_x = bestMove.x;
+            // enemy.pos_y = bestMove.y;
+
+            enemy.TryMove(bestMove.x, bestMove.y, dungeon);
         }
     }
 }

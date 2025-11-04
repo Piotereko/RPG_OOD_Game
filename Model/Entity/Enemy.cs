@@ -25,6 +25,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity
         }
 
         public IEnemyBehavior Behavior { get; set; }
+        public bool is_agressive { get; set; }
 
         public int pos_x { get; set; }
         public int pos_y { get; set; }

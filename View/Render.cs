@@ -171,7 +171,7 @@ namespace RPG_wiedzmin_wanna_be.View
                 Enemy = enemy,
                 Distance = Math.Sqrt(Math.Pow(player.pos_x - enemy.pos_x, 2) + Math.Pow(player.pos_y - enemy.pos_y, 2))
             })
-            .OrderBy(enemyWithDistance => enemyWithDistance.Distance).ToList();
+            .OrderBy(enemyWithDistance => enemyWithDistance.Distance).Take(13).ToList();
 
             ClearArea(96, 15, 20, 10);
 

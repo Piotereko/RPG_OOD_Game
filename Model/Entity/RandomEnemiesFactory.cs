@@ -23,7 +23,7 @@ namespace RPG_wiedzmin_wanna_be.Model.Entity
                 2=> new SkittishBehaviour()
             };*/
 
-            IEnemyBehavior behavior = new CalmBehaviour();
+            IEnemyBehavior behavior = new AgressiveBehaviour();
 
 
             int enemy_type = random.Next(0, 3);
